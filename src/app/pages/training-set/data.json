@@ -1,0 +1,305 @@
+{
+    "lines": {
+        "countdown_3": "3",
+        "countdown_2": "2",
+        "countdown_1": "1",
+        "countdown_start": "Start",
+        "halfway": "Halfway there"
+    },
+    "exercises": {
+        "left_quadriceps_stretch": {
+            "title": "Left Quadriceps leg stretch",
+            "description": "Stand on your right leg, bend your left knee and grab your left foot behind you. Pull your heel gently toward your buttocks while keeping your knees together and maintaining your balance. You should feel a stretch in the front of your left thigh.",
+            "hints": [
+                {
+                    "id": "left_quadriceps_stretch_hip",
+                    "voice": "Rotate your hips inwards for max stretch"
+                },
+                {
+                    "id": "left_quadriceps_stretch_leg_down",
+                    "voice": "Point your left leg downwards"
+                }
+            ]
+        },
+        "right_quadriceps_stretch": {
+            "title": "Right Quadriceps leg stretch",
+            "description": "Stand on your left leg, bend your right knee and grab your right foot behind you. Pull your heel gently toward your buttocks while keeping your knees together and maintaining your balance. You should feel a stretch in the front of your right thigh.",
+            "hints": [
+                {
+                    "id": "right_quadriceps_stretch_hip",
+                    "voice": "Rotate your hips inwards for max stretch"
+                },
+                {
+                    "id": "right_quadriceps_stretch_leg_down",
+                    "voice": "Point your right leg downwards"
+                }
+            ]
+        },
+        "calf_stretch_left": {
+            "title": "Calf stretch left",
+            "description": "Step your left leg back and press your heel into the ground. Keep both feet flat and your back leg straight. Lean forward to stretch the left calf.",
+            "hints": [
+                {
+                    "id": "calf_stretch_left_keep_heel",
+                    "voice": "Keep your left heel on the ground"
+                },
+                {
+                    "id": "calf_stretch_left_straight_knee",
+                    "voice": "Keep your back knee straight"
+                }
+            ]
+        },
+        "calf_stretch_right": {
+            "title": "Calf stretch right",
+            "description": "Step your right leg back and press your heel into the ground. Keep both feet flat and your back leg straight. Lean forward to stretch the right calf.",
+            "hints": [
+                {
+                    "id": "calf_stretch_right_keep_heel",
+                    "voice": "Keep your right heel on the ground"
+                },
+                {
+                    "id": "calf_stretch_right_straight_knee",
+                    "voice": "Keep your back knee straight"
+                }
+            ]
+        },
+        "triceps_stretch_left": {
+            "title": "Triceps stretch left",
+            "description": "Raise your left arm, bend the elbow, and use your right hand to gently pull your left elbow toward your head. Feel the stretch along your triceps.",
+            "hints": [
+                {
+                    "id": "triceps_stretch_left_pull_gently",
+                    "voice": "Pull your elbow gently"
+                },
+                {
+                    "id": "triceps_stretch_left_keep_back_straight",
+                    "voice": "Keep your back straight"
+                }
+            ]
+        },
+        "triceps_stretch_right": {
+            "title": "Triceps stretch right",
+            "description": "Raise your right arm, bend the elbow, and use your left hand to gently pull your right elbow toward your head. Feel the stretch along your triceps.",
+            "hints": [
+                {
+                    "id": "triceps_stretch_right_pull_gently",
+                    "voice": "Pull your elbow gently"
+                },
+                {
+                    "id": "triceps_stretch_right_keep_back_straight",
+                    "voice": "Keep your back straight"
+                }
+            ]
+        },
+        "cobra_stretch": {
+            "title": "Cobra stretch",
+            "description": "Lie face down, place your hands under your shoulders, and press up, lifting your chest. Keep your hips on the ground. Feel the stretch in your abdomen and lower back.",
+            "hints": [
+                {
+                    "id": "cobra_stretch_keep_hips_down",
+                    "voice": "Keep your hips on the floor"
+                },
+                {
+                    "id": "cobra_stretch_open_chest",
+                    "voice": "Open your chest forward"
+                }
+            ]
+        },
+        "childs_pose": {
+            "title": "Child's pose",
+            "description": "Sit back on your heels, stretch your arms forward, and lower your torso to the floor. Relax and breathe deeply, feeling a stretch in your back and shoulders.",
+            "hints": [
+                {
+                    "id": "childs_pose_reach_forward",
+                    "voice": "Reach your arms forward"
+                },
+                {
+                    "id": "childs_pose_relax_hips",
+                    "voice": "Let your hips sink down"
+                }
+            ]
+        },
+        "bridge": {
+            "title": "Bridge",
+            "description": "Lie on your back with knees bent and feet flat. Lift your hips up toward the ceiling, squeezing your glutes. Hold and lower down slowly.",
+            "hints": [
+                {
+                    "id": "bridge_squeeze_glutes",
+                    "voice": "Squeeze your glutes at the top"
+                },
+                {
+                    "id": "bridge_keep_knees_aligned",
+                    "voice": "Keep your knees in line with your hips"
+                }
+            ]
+        },
+        "lying_butterfly_stretch": {
+            "title": "Lying butterfly stretch",
+            "description": "Lie on your back, bring the soles of your feet together, and let your knees fall out to the sides. Relax and feel the stretch in your inner thighs.",
+            "hints": [
+                {
+                    "id": "lying_butterfly_relax_thighs",
+                    "voice": "Let your knees drop naturally"
+                },
+                {
+                    "id": "lying_butterfly_breathe_deeply",
+                    "voice": "Breathe deeply and relax"
+                }
+            ]
+        },
+        "lying_twitch_stretch_left": {
+            "title": "Lying twist stretch left",
+            "description": "Lie on your back, bring your right knee across your body to the left side. Keep your shoulders on the ground and feel the twist in your spine.",
+            "hints": [
+                {
+                    "id": "twist_left_keep_shoulders_down",
+                    "voice": "Keep both shoulders on the floor"
+                },
+                {
+                    "id": "twist_left_breathe_into_twist",
+                    "voice": "Breathe into the stretch"
+                }
+            ]
+        },
+        "lying_twitch_stretch_right": {
+            "title": "Lying twist stretch right",
+            "description": "Lie on your back, bring your left knee across your body to the right side. Keep your shoulders on the ground and feel the twist in your spine.",
+            "hints": [
+                {
+                    "id": "twist_right_keep_shoulders_down",
+                    "voice": "Keep both shoulders on the floor"
+                },
+                {
+                    "id": "twist_right_breathe_into_twist",
+                    "voice": "Breathe into the stretch"
+                }
+            ]
+        }
+    },
+    "workouts": {
+        "leg_stretch": {
+            "title": "Quadriceps leg stretch",
+            "description": "Stretch the quadriceps legs",
+            "duration": 3,
+            "exercises": [
+                {
+                    "id": "left_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "left_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "left_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                }
+            ]
+        },
+        "evening_stretch": {
+            "title": "Evening stretch",
+            "description": "Stretch all for in the evening",
+            "duration": 7,
+            "exercises": [
+                {
+                    "id": "left_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "left_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "left_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "calf_stretch_left",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "calf_stretch_right",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "triceps_stretch_left",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "triceps_stretch_right",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "cobra_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "childs_pose",
+                    "activeSeconds": 40,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "bridge",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "lying_butterfly_stretch",
+                    "activeSeconds": 50,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "lying_twitch_stretch_left",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "lying_twitch_stretch_right",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,20 @@
+<!-- Hero Section -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+  <div class="container mx-auto px-4 py-16">
+    <div class="flex flex-col items-center text-center">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6">
+        Transform Your Workout Experience
+      </h1>
+      <p class="text-xl text-gray-600 mb-8 max-w-2xl">
+        Track your exercises, set timers, and achieve your fitness goals with our intuitive workout timer app.
+      </p>
+    </div>
+  </div>
+  <!-- Sport selection -->
+  <section>
+    @for (item of workouts(); track $index) {
+      <app-exercise-set-overview (clicked)="openExercise(item.id)" class="w-full" [title]="item.title" [description]="item.description" [estimatedTime]="item.duration"></app-exercise-set-overview>
+    }
+    
+  </section>
+</div>
