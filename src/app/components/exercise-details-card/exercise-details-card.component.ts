@@ -48,4 +48,4 @@ export class ExerciseDetailsCardComponent {
   exerciseName = input<string | null>();
   durationSeconds = input<number | null>();
   state = input<ExerciseState | null>();
-} 
+}

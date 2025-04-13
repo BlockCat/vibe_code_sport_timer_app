@@ -1,10 +1,12 @@
 import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TimerDisplayComponent } from './timer-display/timer-display.component';
+import { ProgressRingComponent } from './progress-ring/progress-ring.component';
 
 @Component({
   selector: 'app-timer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TimerDisplayComponent, ProgressRingComponent],
   templateUrl: './timer.component.html',
   styles: []
 })
@@ -22,4 +24,4 @@ export class TimerComponent {
     const ms = this.remainingMs() % 1000;
     return ms.toString().padStart(3, '0');
   });
-} 
+}

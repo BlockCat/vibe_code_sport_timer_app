@@ -1,23 +1,10 @@
-<div class="relative w-64 h-64 flex items-center justify-center">
-  <!-- Background circle with shadow -->
-  <div class="absolute w-full h-full rounded-full border-4 border-gray-200 shadow-lg"></div>
-  
-  <!-- Progress circle with gradient -->
-  <div
-    class="absolute w-full h-full rounded-full"
-    [style.background]="'conic-gradient(from -90deg, #3b82f6 ' + progress() + '%, transparent ' + progress() + '%)'"
-    [style.transform]="'rotate(-90deg)'"
-  ></div>
-  
-  <!-- Inner circle for depth -->
-  <div class="absolute w-[90%] h-[90%] rounded-full bg-white shadow-inner flex flex-col items-center justify-center">
-    <!-- Time text with gradient -->
-    <div class="relative text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-      {{ remainingSeconds() }}
-    </div>
-    <!-- Milliseconds text -->
-    <div class="relative text-xl font-medium text-gray-500">
-      {{ remainingMilliseconds() }}
-    </div>
+<div class="flex items-center justify-center w-full">
+  <div class="relative w-64 h-64">
+    <app-progress-ring [progress]="progress()">
+      <app-timer-display 
+        [seconds]="remainingSeconds()" 
+        [milliseconds]="remainingMilliseconds()">
+      </app-timer-display>
+    </app-progress-ring>
   </div>
-</div> 
+</div>

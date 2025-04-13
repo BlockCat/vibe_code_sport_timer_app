@@ -1,11 +1,16 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TimerComponent } from '../../timer/timer.component';
 import { ExerciseDetailsCardComponent } from '../../components/exercise-details-card/exercise-details-card.component';
 import { ExerciseControlsComponent } from '../../components/exercise-controls/exercise-controls.component';
 import { ExerciseProgressComponent } from '../../components/exercise-progress/exercise-progress.component';
+import { ExerciseHeaderComponent } from '../../components/exercise-header/exercise-header.component';
+import { ExerciseSetInfoComponent } from '../../components/exercise-set-info/exercise-set-info.component';
+import { WorkoutCompletionComponent } from '../../components/workout-completion/workout-completion.component';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import { TimerService } from '../../utils/timer.service';
+import { AudioService } from '../../services/audio.service';
 import data from "./data.json";
 
 export interface ActiveExercise {
@@ -23,13 +28,10 @@ export interface ExerciseSet {
 }
 
 export interface Exercise {
-
   id: string;
   activeSeconds: number;
   breakSeconds: number;
 }
-
-
 
 export enum ExerciseState {
   Prepare = 'prepare',
@@ -47,7 +49,11 @@ export enum ExerciseState {
     TimerComponent,
     ExerciseDetailsCardComponent,
     ExerciseControlsComponent,
-    ExerciseProgressComponent
+    ExerciseProgressComponent,
+    ExerciseHeaderComponent,
+    ExerciseSetInfoComponent,
+    WorkoutCompletionComponent,
+    LoadingSpinnerComponent
   ],
   templateUrl: './training-set.component.html'
 })
@@ -65,62 +71,38 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
   totalExercises = 5;
   currentExerciseSet: ExerciseSet | null = null;
 
-
-
   private readonly PREP_TIME_SECONDS = 7;
-  private readonly HALFWAY_THRESHOLD = 0.5;
 
   constructor(
     private route: ActivatedRoute,
-    private timerService: TimerService
+    private router: Router,
+    private timerService: TimerService,
+    private audioService: AudioService
   ) {
-
     this.preparationStarted.subscribe((index) => {
-      let exercise = this.currentExerciseSet!.exercises[index];
-
-
-      const audio = new Audio(`/voices/${exercise.id}_${exercise.activeSeconds}.mp3`);
-      audio.playbackRate = 1.1;
-      audio.play();
-    });
-    this.exerciseStarted.subscribe((index) => {
-      let exercise = this.currentExerciseSet!.exercises[index];
-
-
-      const audio = new Audio(`/voices/countdown_start.mp3`);
-      audio.playbackRate = 1.1;
-      audio.play();
-    });
-    this.exerciseSecondsLeft.subscribe((times) => {
-      let exercise = this.currentExerciseSet!.exercises[times.exerciseIndex];
-
-      if (times.seconds === 3) {
-        const audio = new Audio(`/voices/countdown_3.mp3`);
-        audio.playbackRate = 1.1;
-        audio.play();
-      } else if (times.seconds === 2) {
-        const audio = new Audio(`/voices/countdown_2.mp3`);
-        audio.playbackRate = 1.1;
-        audio.play();
-      } else if (times.seconds === 1) {
-        const audio = new Audio(`/voices/countdown_1.mp3`);
-        audio.playbackRate = 1.1;
-        audio.play();
-      } else if (times.seconds === Math.ceil(times.totalSeconds / 2) && times.totalSeconds > 20) {
-        const audio = new Audio(`/voices/halfway.mp3`);
-        audio.playbackRate = 1.1;
-        audio.play();
-      } else if (times.seconds === Math.ceil(times.totalSeconds * 0.8) && times.totalSeconds > 15) {
-        let hints = data.exercises[exercise.id as keyof typeof data.exercises].hints;
-        let random = Math.floor(Math.random() * hints.length);        
-
-        let hint = hints[random].id;
-        const audio = new Audio(`/voices/${hint}.mp3`);
-        audio.playbackRate = 1.1;
-        audio.play();
+      if (this.currentExerciseSet) {
+        let exercise = this.currentExerciseSet.exercises[index];
+        this.audioService.playExerciseIntro(exercise.id, exercise.activeSeconds);
       }
+    });
+    
+    this.exerciseStarted.subscribe(() => {
+      this.audioService.playCountdownStart();
+    });
+    
+    this.exerciseSecondsLeft.subscribe((times) => {
+      if (!this.currentExerciseSet) return;
+      
+      let exercise = this.currentExerciseSet.exercises[times.exerciseIndex];
 
-    })
+      if (times.seconds === 3 || times.seconds === 2 || times.seconds === 1) {
+        this.audioService.playCountdown(times.seconds);
+      } else if (times.seconds === Math.ceil(times.totalSeconds / 2) && times.totalSeconds > 20) {
+        this.audioService.playHalfway();
+      } else if (times.seconds === Math.ceil(times.totalSeconds * 0.8) && times.totalSeconds > 15) {
+        this.audioService.playRandomHint(exercise.id);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -138,14 +120,16 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
     this.timerService.stop();
   }
 
-
   private startPreparation(index: number, first: boolean): void {
+    if (index >= this.totalExercises) {
+      this.exercise = { ...this.exercise!, state: ExerciseState.Finished };
+      return;
+    }
 
     this.preparationStarted.emit(index);
-    this.exercise = this.createActiveExercisebyId(0, ExerciseState.Prepare);
+    this.exercise = this.createActiveExercisebyId(index, ExerciseState.Prepare);
 
-    const startTime = first ? 7 : this.currentExerciseSet!.exercises[index - 1].breakSeconds;
-
+    const startTime = first ? this.PREP_TIME_SECONDS : this.currentExerciseSet!.exercises[index - 1].breakSeconds;
 
     this.timerService.start(
       startTime * 1000,
@@ -156,19 +140,20 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
           const secondsLeft = Math.ceil(remainingMs / 1000);
 
           if (oldRemaining != secondsLeft) {
-            // Emit seconds left
-            this.exerciseSecondsLeft.emit({ seconds: secondsLeft, totalSeconds: this.exercise.durationSeconds, exerciseIndex: this.exercise.index });
+            this.exerciseSecondsLeft.emit({ 
+              seconds: secondsLeft, 
+              totalSeconds: this.exercise.durationSeconds, 
+              exerciseIndex: this.exercise.index 
+            });
           }
         }
       },
-      () => this.startExercise(0)
+      () => this.startExercise(index)
     );
   }
 
-
   startExercise(index: number): void {
     this.exercise = this.createActiveExercisebyId(index, ExerciseState.Active);
-
     this.exerciseStarted.emit(this.exercise.index);
 
     this.timerService.start(
@@ -180,10 +165,12 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
           const secondsLeft = Math.ceil(remainingMs / 1000);
 
           if (oldRemaining != secondsLeft) {
-            // Emit seconds left
-            this.exerciseSecondsLeft.emit({ seconds: secondsLeft, totalSeconds: this.exercise.durationSeconds, exerciseIndex: this.exercise.index });
+            this.exerciseSecondsLeft.emit({ 
+              seconds: secondsLeft, 
+              totalSeconds: this.exercise.durationSeconds, 
+              exerciseIndex: this.exercise.index 
+            });
           }
-
         }
       },
       () => {
@@ -207,6 +194,15 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
     this.exercise.state = ExerciseState.Active;
     this.exerciseResumed.emit(this.exercise.index);
     this.timerService.resume();
+  }
+
+  restartWorkout(): void {
+    if (!this.currentExerciseSet) return;
+    this.startPreparation(0, true);
+  }
+
+  exitWorkout(): void {
+    this.router.navigate(['/']);
   }
 
   title(id: number): string {

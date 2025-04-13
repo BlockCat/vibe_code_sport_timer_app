@@ -3,83 +3,59 @@
     <div class="divide-y divide-gray-200">
       <div class="text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
 
-
         @if (currentExerciseSet) {
-        <!-- Exercise Details -->
-        <div>
-          <app-exercise-details-card
-            [exerciseName]="exercise ? title(exercise.index) : null"
-            [durationSeconds]="exercise?.durationSeconds ?? null" [state]="exercise?.state ?? null" />
-        </div>
+          <!-- Header -->
+          <app-exercise-header
+            [title]="currentExerciseSet.title"
+            [description]="currentExerciseSet.description">
+          </app-exercise-header>
 
-        <!-- Timer Display -->
-        <div class="flex flex-col items-center justify-center py-6">
-          @if (exercise) {
+          <!-- Exercise Details -->
           <div>
-            <app-timer [remainingMs]="exercise.remainingMs" [totalSeconds]="exercise.durationSeconds" />
+            <app-exercise-details-card
+              [exerciseName]="exercise ? title(exercise.index) : null"
+              [durationSeconds]="exercise?.durationSeconds ?? null" 
+              [state]="exercise?.state ?? null" />
           </div>
-          <div class="w-full max-w-xs mx-auto">
-            <app-exercise-controls [state]="exercise?.state ?? null" (start)="startExercise(this.exercise.index)"
-              (pause)="pauseExercise()" (resume)="resumeExercise()" />
-          </div>
-          }
-        </div>
 
-        <!-- Progress -->
-        <div class="mt-8">
-          <app-exercise-progress [currentExercise]="exercise?.index ?? null" [totalExercises]="totalExercises" />
-        </div>
-
-        <!-- Exercise Set Info -->
-        <div class="mt-6 pt-6 border-t border-gray-200">
-          <div class="grid grid-cols-2 gap-4 text-sm text-gray-500">
-            <div>
-              <p class="font-medium text-gray-700">Total Duration</p>
-              <p>{{ currentExerciseSet.duration }} minutes</p>
-            </div>
-            <div>
-              <p class="font-medium text-gray-700">Exercises</p>
-              <p>{{ totalExercises }} exercises</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Header -->
-        <section>
-          <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Active Training Set</h1>
-            @if (currentExerciseSet) {
-            <p class="text-indigo-600 font-medium">{{ currentExerciseSet.title }}</p>
-            <p class="text-sm text-gray-500 mt-1">{{ currentExerciseSet.description }}</p>
+          <!-- Timer Display -->
+          <div class="flex flex-col items-center justify-center py-6">
+            @if (exercise) {
+              <app-timer 
+                [remainingMs]="exercise.remainingMs" 
+                [totalSeconds]="exercise.durationSeconds" />
+              <div class="w-full max-w-xs mx-auto mt-4">
+                <app-exercise-controls 
+                  [state]="exercise.state" 
+                  (start)="startExercise(this.exercise.index)"
+                  (pause)="pauseExercise()" 
+                  (resume)="resumeExercise()" />
+              </div>
             }
           </div>
-        </section>
 
-        <!-- Completion Screen -->
-        @if (exercise?.state === ExerciseState.Finished) {
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div class="bg-white p-8 rounded-xl max-w-md w-full mx-4 text-center">
-            <div class="text-6xl mb-4">🎉</div>
-            <h2 class="text-3xl font-bold text-indigo-600 mb-4">Workout Complete!</h2>
-            <p class="text-gray-600 mb-6">Great job! You've completed all exercises.</p>
-            <div class="flex justify-center space-x-4">
-              <button class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-                Start Again
-              </button>
-              <button class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                Exit
-              </button>
-            </div>
+          <!-- Progress -->
+          <div class="mt-8">
+            <app-exercise-progress 
+              [currentExercise]="exercise?.index ?? null" 
+              [totalExercises]="totalExercises" />
           </div>
-        </div>
-        }
+
+          <!-- Exercise Set Info -->
+          <app-exercise-set-info
+            [duration]="currentExerciseSet.duration"
+            [exerciseCount]="totalExercises">
+          </app-exercise-set-info>
+
+          <!-- Completion Screen -->
+          @if (exercise?.state === ExerciseState.Finished) {
+            <app-workout-completion
+              (startAgain)="restartWorkout()"
+              (exit)="exitWorkout()">
+            </app-workout-completion>
+          }
         } @else {
-        <div class="text-center py-12">
-          <div class="animate-pulse">
-            <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-4"></div>
-            <div class="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-          </div>
-        </div>
+          <app-loading-spinner message="Loading workout..."></app-loading-spinner>
         }
       </div>
     </div>

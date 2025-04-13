@@ -10,11 +10,16 @@
       </p>
     </div>
   </div>
-  <!-- Sport selection -->
-  <section>
-    @for (item of workouts(); track $index) {
-      <app-exercise-set-overview (clicked)="openExercise(item.id)" class="w-full" [title]="item.title" [description]="item.description" [estimatedTime]="item.duration"></app-exercise-set-overview>
-    }
-    
-  </section>
+  
+  @if (loading) {
+    <!-- Loading state -->
+    <app-loading-spinner message="Loading workout..."></app-loading-spinner>
+  } @else {
+    <!-- Sport selection -->
+    <section>
+      @for (item of workouts(); track $index) {
+        <app-exercise-set-overview (clicked)="openExercise(item.id)" class="w-full" [title]="item.title" [description]="item.description" [estimatedTime]="item.duration"></app-exercise-set-overview>
+      }
+    </section>
+  }
 </div>
