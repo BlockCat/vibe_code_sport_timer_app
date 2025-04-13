@@ -1,6 +1,6 @@
 import { Component, EventEmitter, input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExerciseState } from '../../pages/training-set/training-set.component';
+import { ExerciseState } from '../../shared/exercise-state.enum';
 
 @Component({
   selector: 'app-exercise-controls',
@@ -41,4 +41,4 @@ export class ExerciseControlsComponent {
   @Output() start = new EventEmitter<void>();
   @Output() pause = new EventEmitter<void>();
   @Output() resume = new EventEmitter<void>();
-} 
+}

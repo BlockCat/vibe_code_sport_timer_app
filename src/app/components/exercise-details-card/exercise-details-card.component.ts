@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExerciseState } from '../../pages/training-set/training-set.component';
+import { ExerciseState } from '../../shared/exercise-state.enum';
 
 @Component({
   selector: 'app-exercise-details-card',

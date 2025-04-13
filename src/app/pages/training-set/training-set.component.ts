@@ -11,6 +11,7 @@ import { WorkoutCompletionComponent } from '../../components/workout-completion/
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import { TimerService } from '../../utils/timer.service';
 import { AudioService } from '../../services/audio.service';
+import { ExerciseState } from '../../shared/exercise-state.enum';
 import data from "./data.json";
 
 export interface ActiveExercise {
@@ -31,14 +32,6 @@ export interface Exercise {
   id: string;
   activeSeconds: number;
   breakSeconds: number;
-}
-
-export enum ExerciseState {
-  Prepare = 'prepare',
-  Active = 'active',
-  Recovery = 'recovery',
-  Pause = 'pause',
-  Finished = 'finished'
 }
 
 @Component({

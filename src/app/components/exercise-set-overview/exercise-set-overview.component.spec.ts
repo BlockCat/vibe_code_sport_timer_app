@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { By } from '@angular/platform-browser';
 import { ExerciseSetOverviewComponent } from './exercise-set-overview.component';
 
 describe('ExerciseSetOverviewComponent', () => {
@@ -14,6 +14,12 @@ describe('ExerciseSetOverviewComponent', () => {
 
     fixture = TestBed.createComponent(ExerciseSetOverviewComponent);
     component = fixture.componentInstance;
+    
+    // Set default values for inputs
+    fixture.componentRef.setInput('title', 'Default Test Title');
+    fixture.componentRef.setInput('description', 'Default test description');
+    fixture.componentRef.setInput('estimatedTime', 30);
+    
     fixture.detectChanges();
   });
 
@@ -27,7 +33,7 @@ describe('ExerciseSetOverviewComponent', () => {
     fixture.detectChanges();
     
     const titleElement = fixture.nativeElement.querySelector('h3');
-    expect(titleElement.textContent).toContain(testTitle);
+    expect(titleElement.textContent.trim()).toContain(testTitle);
   });
 
   it('should display the description', () => {
@@ -36,7 +42,7 @@ describe('ExerciseSetOverviewComponent', () => {
     fixture.detectChanges();
     
     const descriptionElement = fixture.nativeElement.querySelector('p');
-    expect(descriptionElement.textContent).toContain(testDescription);
+    expect(descriptionElement.textContent.trim()).toContain(testDescription);
   });
 
   it('should display the estimated time', () => {
@@ -44,8 +50,8 @@ describe('ExerciseSetOverviewComponent', () => {
     fixture.componentRef.setInput('estimatedTime', testTime);
     fixture.detectChanges();
     
-    const timeElement = fixture.nativeElement.querySelector('.flex.items-center');
-    expect(timeElement.textContent).toContain(`${testTime} min`);
+    const timeElement = fixture.debugElement.query(By.css('.flex.items-center div')).nativeElement;
+    expect(timeElement.textContent.trim()).toContain(`${testTime} min`);
   });
 
   it('should display times per day when provided', () => {
@@ -53,32 +59,33 @@ describe('ExerciseSetOverviewComponent', () => {
     fixture.componentRef.setInput('timesPerDay', testTimesPerDay);
     fixture.detectChanges();
     
-    const timesPerDayElement = fixture.nativeElement.querySelectorAll('.flex.items-center')[1];
-    expect(timesPerDayElement.textContent).toContain(`${testTimesPerDay}x/day`);
+    const timeElements = fixture.debugElement.queryAll(By.css('.flex.items-center div'));
+    expect(timeElements.length).toBe(2); // Both time and times per day elements
+    expect(timeElements[1].nativeElement.textContent).toContain(`${testTimesPerDay}x/day`);
   });
 
   it('should not display times per day when not provided', () => {
     fixture.componentRef.setInput('timesPerDay', undefined);
     fixture.detectChanges();
     
-    const timesPerDayElements = fixture.nativeElement.querySelectorAll('.flex.items-center');
-    expect(timesPerDayElements.length).toBe(1); // Only the time element should be present
+    const timeElements = fixture.debugElement.queryAll(By.css('.flex.items-center div'));
+    expect(timeElements.length).toBe(1); // Only the time element should be present
   });
 
   it('should emit clicked event when panel is clicked', () => {
-    const clickedSpy = spyOn(component.clicked, 'emit');
+    spyOn(component.clicked, 'emit');
     
     const panel = fixture.nativeElement.querySelector('div');
     panel.click();
     
-    expect(clickedSpy).toHaveBeenCalled();
+    expect(component.clicked.emit).toHaveBeenCalled();
   });
 
   it('should have gold-colored icons', () => {
     const icons = fixture.nativeElement.querySelectorAll('svg');
-    icons.forEach((icon: Element) => {
-      expect(icon.classList.contains('text-amber-500')).toBeTrue();
-    });
+    for (let i = 0; i < icons.length; i++) {
+      expect(icons[i].classList.contains('text-amber-500')).toBeTrue();
+    }
   });
 
   it('should have proper hover effects', () => {
