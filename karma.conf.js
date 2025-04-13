@@ -5,6 +5,7 @@ module.exports = function (config) {
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
+      require('karma-chrome-launcher'),
       require('karma-firefox-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
@@ -26,8 +27,10 @@ module.exports = function (config) {
       ]
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['Firefox'],
+    browsers: ['Firefox'], // Changed to Firefox which is available in dependencies
     restartOnFileChange: true,
-    browserNoActivityTimeout: 40000
+    browserNoActivityTimeout: 40000,
+    // Add more detailed logging
+    logLevel: config.LOG_DEBUG
   });
 };
