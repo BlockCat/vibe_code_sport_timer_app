@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, output } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TimerComponent } from '../../timer/timer.component';
@@ -9,8 +9,10 @@ import { ExerciseHeaderComponent } from '../../components/exercise-header/exerci
 import { ExerciseSetInfoComponent } from '../../components/exercise-set-info/exercise-set-info.component';
 import { WorkoutCompletionComponent } from '../../components/workout-completion/workout-completion.component';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
+import { ScheduleWorkoutComponent } from '../../components/schedule-workout/schedule-workout.component';
 import { TimerService } from '../../utils/timer.service';
 import { AudioService } from '../../services/audio.service';
+import { NotificationService } from '../../services/notification.service';
 import { ExerciseState } from '../../shared/exercise-state.enum';
 import data from "./data.json";
 
@@ -46,18 +48,19 @@ export interface Exercise {
     ExerciseHeaderComponent,
     ExerciseSetInfoComponent,
     WorkoutCompletionComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    ScheduleWorkoutComponent
   ],
   templateUrl: './training-set.component.html'
 })
 export class TrainingSetComponent implements OnInit, OnDestroy {
 
-  preparationStarted = output<number>();
-  exerciseStarted = output<number>();
-  exerciseEnded = output<number>();
-  exerciseSecondsLeft = output<{ seconds: number, totalSeconds: number, exerciseIndex: number }>();
-  exercisePaused = output<number>();
-  exerciseResumed = output<number>();
+  @Output() preparationStarted = new EventEmitter<number>();
+  @Output() exerciseStarted = new EventEmitter<number>();
+  @Output() exerciseEnded = new EventEmitter<number>();
+  @Output() exerciseSecondsLeft = new EventEmitter<{ seconds: number, totalSeconds: number, exerciseIndex: number }>();
+  @Output() exercisePaused = new EventEmitter<number>();
+  @Output() exerciseResumed = new EventEmitter<number>();
 
   ExerciseState = ExerciseState;
   exercise: ActiveExercise | null = null;
@@ -66,11 +69,16 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
 
   private readonly PREP_TIME_SECONDS = 7;
 
+  // Add schedule workout dialog properties
+  showScheduleDialog = false;
+  workoutId = '';
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private timerService: TimerService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private notificationService: NotificationService
   ) {
     this.preparationStarted.subscribe((index) => {
       if (this.currentExerciseSet) {
@@ -189,12 +197,25 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
     this.timerService.resume();
   }
 
+  // Override the original method to add achievement notification
   restartWorkout(): void {
     if (!this.currentExerciseSet) return;
+    
+    // Only show achievement if we completed the workout
+    if (this.exercise?.state === ExerciseState.Finished) {
+      this.showAchievementNotification();
+    }
+    
     this.startPreparation(0, true);
   }
 
+  // Override to add achievement notification
   exitWorkout(): void {
+    // Only show achievement if we completed the workout
+    if (this.exercise?.state === ExerciseState.Finished) {
+      this.showAchievementNotification();
+    }
+    
     this.router.navigate(['/']);
   }
 
@@ -227,7 +248,26 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
       console.error(`Exercise set with id ${id} not found`);
       return null;
     }
-
+    
+    this.workoutId = id;
     return exerciseSet;
+  }
+
+  // Schedule workout dialog methods
+  openScheduleDialog(): void {
+    this.showScheduleDialog = true;
+  }
+
+  closeScheduleDialog(): void {
+    this.showScheduleDialog = false;
+  }
+
+  // When workout is completed, show an achievement notification
+  private showAchievementNotification(): void {
+    if (this.currentExerciseSet) {
+      this.notificationService.showAchievementNotification(
+        `You've completed the ${this.currentExerciseSet.title} workout! Great job!`
+      );
+    }
   }
 }

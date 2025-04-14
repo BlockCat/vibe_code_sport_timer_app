@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ExerciseSetOverviewComponent } from "../../components/exercise-set-overview/exercise-set-overview.component";
 import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 import data from "../training-set/data.json";
@@ -8,7 +9,7 @@ import data from "../training-set/data.json";
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ExerciseSetOverviewComponent, LoadingSpinnerComponent],
+  imports: [ExerciseSetOverviewComponent, LoadingSpinnerComponent, RouterLink],
   templateUrl: './home.component.html'
 })
 export class HomeComponent {
