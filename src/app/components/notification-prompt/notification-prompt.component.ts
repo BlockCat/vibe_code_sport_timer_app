@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NotificationService, ExtendedNotificationOptions } from '../../services/notification.service';
+import { ExtendedNotificationOptions, NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-notification-prompt',
