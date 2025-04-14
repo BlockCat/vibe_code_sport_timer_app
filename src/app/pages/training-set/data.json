@@ -7,6 +7,34 @@
         "halfway": "Halfway there"
     },
     "exercises": {
+        "left_tensor_stretch": {
+            "title": "Lying left tensor stretch",
+            "description": "Lie on your right side with your legs stacked. Bend your left knee and place your left foot in front of your right leg. Gently push your left knee toward the floor while keeping your pelvis stable. You should feel a stretch along the outside of your left hip and thigh.",
+            "hints": [
+                {
+                    "id": "left_tensor_stretch_knee_down",
+                    "voice": "Gently press your left knee toward the floor"
+                },
+                {
+                    "id": "left_tensor_stretch_stable_pelvis", 
+                    "voice": "Keep your pelvis stable and don't roll backward"
+                }
+            ]
+        },
+        "right_tensor_stretch": {
+            "title": "Lying right tensor stretch",
+            "description": "Lie on your left side with your legs stacked. Bend your right knee and place your right foot in front of your left leg. Gently push your right knee toward the floor while keeping your pelvis stable. You should feel a stretch along the outside of your right hip and thigh.",
+            "hints": [
+                {
+                    "id": "right_tensor_stretch_knee_down",
+                    "voice": "Gently press your right knee toward the floor"
+                },
+                {
+                    "id": "right_tensor_stretch_stable_pelvis", 
+                    "voice": "Keep your pelvis stable and don't roll backward"
+                }
+            ]
+        },
         "left_quadriceps_stretch": {
             "title": "Left Quadriceps leg stretch",
             "description": "Stand on your right leg, bend your left knee and grab your left foot behind you. Pull your heel gently toward your buttocks while keeping your knees together and maintaining your balance. You should feel a stretch in the front of your left thigh.",
@@ -209,6 +237,35 @@
                 },
                 {
                     "id": "right_quadriceps_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "left_tensor_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                }, {
+                    "id": "right_tensor_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "left_tensor_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_tensor_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "left_tensor_stretch",
+                    "activeSeconds": 30,
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "right_tensor_stretch",
                     "activeSeconds": 30,
                     "breakSeconds": 7
                 }
