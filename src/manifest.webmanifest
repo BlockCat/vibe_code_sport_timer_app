@@ -8,6 +8,18 @@
   "start_url": "./",
   "orientation": "portrait",
   "description": "Track your exercises and workouts with timed intervals",
+  "categories": ["fitness", "health", "sports"],
+  "prefer_related_applications": false,
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "shortcuts": [
+    {
+      "name": "Start Workout",
+      "short_name": "Workout",
+      "description": "Start a new workout session",
+      "url": "./?action=workout",
+      "icons": [{ "src": "icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "icons/icon-72x72.png",
