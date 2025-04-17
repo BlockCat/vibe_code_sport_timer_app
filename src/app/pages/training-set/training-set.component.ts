@@ -115,10 +115,14 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
         this.startPreparation(0, true);
       }
     });
+
+    // Add event listener for back button click event
+    window.addEventListener('popstate', this.handleBackButtonClick.bind(this));
   }
 
   ngOnDestroy(): void {
     this.timerService.stop();
+    window.removeEventListener('popstate', this.handleBackButtonClick.bind(this));
   }
 
   private startPreparation(index: number, first: boolean): void {
@@ -216,7 +220,7 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
       this.showAchievementNotification();
     }
     
-    this.router.navigate(['/']);
+    this.showQuitConfirmationDialog();
   }
 
   title(id: number): string {
@@ -268,6 +272,22 @@ export class TrainingSetComponent implements OnInit, OnDestroy {
       this.notificationService.showAchievementNotification(
         `You've completed the ${this.currentExerciseSet.title} workout! Great job!`
       );
+    }
+  }
+
+  // Add method to show confirmation dialog
+  private showQuitConfirmationDialog(): void {
+    const confirmation = window.confirm('Are you sure you want to quit the workout?');
+    if (confirmation) {
+      this.router.navigate(['/']);
+    }
+  }
+
+  // Add method to handle back button click event
+  private handleBackButtonClick(event: PopStateEvent): void {
+    if (this.exercise && this.exercise.state === ExerciseState.Active) {
+      event.preventDefault();
+      this.showQuitConfirmationDialog();
     }
   }
 }
