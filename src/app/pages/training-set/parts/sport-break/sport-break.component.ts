@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import {
   WorkoutRecoveryState,
   WorkoutState,
@@ -32,6 +32,8 @@ export class SportBreakComponent {
   currentExercise = computed(() => this.state().exercise!);
   currentExerciseSet = computed(() => this.state().exerciseSet);
   timesMsRemaining = computed(() => this.state().state.remainingMs);
+
+  finish = output<void>();
 
   title(id: number): string {
     const exercise_id = this.currentExerciseSet().exercises[id].id;

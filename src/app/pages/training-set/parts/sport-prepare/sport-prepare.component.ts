@@ -1,16 +1,26 @@
-import { Component, computed, input } from '@angular/core';
-import { WorkoutPrepareState, WorkoutState } from '../../../../services/workout.service';
+import { Component, computed, input, output } from '@angular/core';
+import {
+  WorkoutPrepareState,
+  WorkoutState,
+} from '../../../../services/workout.service';
 import data from '../../data.json';
-import { ExerciseDetailsCardComponent } from "../../../../components/exercise-details-card/exercise-details-card.component";
-import { TimerComponent } from "../../../../timer/timer.component";
-import { ExerciseControlsComponent } from "../../../../components/exercise-controls/exercise-controls.component";
-import { ExerciseProgressComponent } from "../../../../components/exercise-progress/exercise-progress.component";
-import { ExerciseSetInfoComponent } from "../../../../components/exercise-set-info/exercise-set-info.component";
-import { ExerciseHeaderComponent } from "../../../../components/exercise-header/exercise-header.component";
+import { ExerciseDetailsCardComponent } from '../../../../components/exercise-details-card/exercise-details-card.component';
+import { TimerComponent } from '../../../../timer/timer.component';
+import { ExerciseControlsComponent } from '../../../../components/exercise-controls/exercise-controls.component';
+import { ExerciseProgressComponent } from '../../../../components/exercise-progress/exercise-progress.component';
+import { ExerciseSetInfoComponent } from '../../../../components/exercise-set-info/exercise-set-info.component';
+import { ExerciseHeaderComponent } from '../../../../components/exercise-header/exercise-header.component';
 
 @Component({
   selector: 'app-sport-prepare',
-  imports: [ExerciseDetailsCardComponent, TimerComponent, ExerciseControlsComponent, ExerciseProgressComponent, ExerciseSetInfoComponent, ExerciseHeaderComponent],
+  imports: [
+    ExerciseDetailsCardComponent,
+    TimerComponent,
+    ExerciseControlsComponent,
+    ExerciseProgressComponent,
+    ExerciseSetInfoComponent,
+    ExerciseHeaderComponent,
+  ],
   templateUrl: './sport-prepare.component.html',
 })
 export class SportPrepareComponent {
@@ -19,11 +29,12 @@ export class SportPrepareComponent {
       state: WorkoutPrepareState;
     }
   >();
+  finish = output<void>();
   currentExercise = computed(() => this.state().exercise!);
   currentExerciseSet = computed(() => this.state().exerciseSet);
   timesMsRemaining = computed(() => this.state().state.remainingMs);
 
-   title(id: number): string {
+  title(id: number): string {
     const exercise_id = this.currentExerciseSet().exercises[id].id;
     return data.exercises[exercise_id as keyof typeof data.exercises].title;
   }

@@ -84,7 +84,7 @@ export class TrainingSetComponent implements OnDestroy {
     exercise: { goal: { duration: number } };
     state: WorkoutActiveTimerState;
   } {
-    return state.state && state.state.type === 'active';
+    return state.state && state.state.type === 'active' && !!state.exercise && 'duration' in state.exercise.goal;
   }
 
   asPrepareState(state: WorkoutState): state is WorkoutState & {

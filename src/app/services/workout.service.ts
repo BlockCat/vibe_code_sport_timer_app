@@ -67,7 +67,18 @@ export class WorkoutService {
     const exercise = this.createExerciseFromSet(exerciseSet, 0);
 
     if ('duration' in exercise.goal) {
-      this.audioService.playExerciseIntro(exercise.id, exercise.goal.duration);
+      this.audioService.playExerciseIntro(
+        exercise.id,
+        exercise.goal.duration,
+        false
+      );
+    }
+    if ('repetitions' in exercise.goal) {
+      this.audioService.playExerciseIntro(
+        exercise.id,
+        exercise.goal.repetitions,
+        true
+      );
     }
 
     this.workoutState.set({
@@ -103,6 +114,7 @@ export class WorkoutService {
           repetitions: exercise.goal.repetitions,
         },
       });
+      this.stopwatch.stop();
     } else if ('duration' in exercise.goal) {
       this.workoutState.set({
         ...currentState,
@@ -131,6 +143,21 @@ export class WorkoutService {
     }
 
     const exercise = currentState.exerciseSet.exercises[index];
+
+    if ('duration' in exercise.goal) {
+      this.audioService.playExerciseIntro(
+        exercise.id,
+        exercise.goal.duration,
+        false
+      );
+    }
+    if ('repetitions' in exercise.goal) {
+      this.audioService.playExerciseIntro(
+        exercise.id,
+        exercise.goal.repetitions,
+        true
+      );
+    }
 
     this.workoutState.set({
       ...currentState,

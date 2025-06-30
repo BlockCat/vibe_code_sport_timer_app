@@ -5,14 +5,15 @@
     (start)="startExercise()"
     (pause)="pauseExercise()"
     (resume)="resumeExercise()"
+    (finish)="finishExercise()"
   ></app-sport-timer-dumb>
   } @else if (asPrepareState(state)) {
-  <app-sport-prepare [state]="state"></app-sport-prepare>
+  <app-sport-prepare [state]="state" (finish)="finishExercise()"></app-sport-prepare>
 
   } @else if (asRecoveryState(state)){
-  <app-sport-break [state]="state"></app-sport-break>
+  <app-sport-break [state]="state" (finish)="finishExercise()"></app-sport-break>
   } @else if (asFinishedState(state)) {
-  <app-sport-complete [state]="state"></app-sport-complete>
+  <app-sport-complete [state]="state" (finish)="finishExercise()"></app-sport-complete>
   } @else if (asActiveClickState(state)) {
   <app-sport-clicker [state]="state" (finish)="finishExercise()" />
 

@@ -40,6 +40,7 @@ export class SportTimerDumbComponent {
 
   onPauseExercise = output<void>();
   onResumeExercise = output<void>();
+  finish = output<void>();
 
   title(id: number): string {
     const exercise_id = this.currentExerciseSet().exercises[id].id;
