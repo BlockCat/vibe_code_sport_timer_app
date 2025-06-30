@@ -1,6 +1,5 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExerciseState } from '../../shared/exercise-state.enum';
 
 @Component({
   selector: 'app-exercise-details-card',
@@ -8,29 +7,29 @@ import { ExerciseState } from '../../shared/exercise-state.enum';
   imports: [CommonModule],
   template: `
     <div class="bg-gray-50 p-4 rounded-lg mb-4 shadow">
+      @if(preparing()) {
+      <h2 class="text-xl font-semibold mb-2">Preparing for Exercise</h2>
+      } @else {
       <h2 class="text-xl font-semibold mb-2">Current Exercise</h2>
+      }
+
       <div class="grid grid-cols-2 gap-4">
         <div>
           <p class="text-sm text-gray-500">Exercise Name</p>
           <p class="font-medium">
             @if (exerciseName()) {
-              {{ exerciseName() }}
-            } @else {
-              Not started
-            }
+            {{ exerciseName() }}
+            } @else { Not started }
           </p>
         </div>
         <div>
           <p class="text-sm text-gray-500">Duration</p>
           <p class="font-medium">
             @if (durationSeconds()) {
-              {{ durationSeconds() }} seconds
-            } @else {
-              -
-            }
+            {{ durationSeconds() }} seconds } @else { - }
           </p>
         </div>
-        <div class="col-span-2">
+        <!-- <div class="col-span-2">
           <p class="text-sm text-gray-500">State</p>
           <p class="font-medium">
             @if (state()) {
@@ -39,13 +38,14 @@ import { ExerciseState } from '../../shared/exercise-state.enum';
               -
             }
           </p>
-        </div>
+        </div> -->
       </div>
     </div>
-  `
+  `,
 })
 export class ExerciseDetailsCardComponent {
   exerciseName = input<string | null>();
   durationSeconds = input<number | null>();
-  state = input<ExerciseState | null>();
+
+  preparing = input<boolean>(false);
 }

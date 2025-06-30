@@ -1,4 +1,6 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
+import { Stopwatch, TimerService } from '../utils/timer.service';
+import { AudioService } from './audio.service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +9,7 @@ export class WorkoutService {
   private readonly PREP_TIME_SECONDS = 7;
 
   workoutState = signal<WorkoutState | undefined>(undefined);
+  stopwatch: Stopwatch;
 
   currentExercise = computed(() => this.workoutState()?.exercise);
   currentExerciseSet = computed(() => this.workoutState()?.exerciseSet);
@@ -14,37 +17,68 @@ export class WorkoutService {
     () => this.workoutState()?.exerciseSet.exercises.length || 0
   );
 
-  constructor() {}
+  constructor(timerService: TimerService, private audioService: AudioService) {
+    this.stopwatch = timerService
+      .begin()
+      .withOnTick((rms) => {
+        this.workoutState.update((state) => {
+          if (state === undefined) {
+            return state;
+          }
+          if ('remainingMs' in state.state) {
+            return {
+              ...state,
+              state: {
+                ...state.state,
+                remainingMs: rms,
+              },
+            };
+          }
+          return state;
+        });
+        console.log('Timer tick:', rms);
+      })
+      .withOnSecondTick((rms) => {
+        console.log('Timer second tick:', rms);
+        audioService.playCountdown(rms);
+
+        const exercise = this.currentExercise();
+        if (exercise && 'duration' in exercise.goal) {
+          if (
+            exercise?.goal.duration > 20 &&
+            rms === Math.floor(exercise.goal.duration / 2)
+          ) {
+            this.audioService.playHalfway();
+          }
+          if (
+            exercise.goal.duration > 20 &&
+            rms === exercise.goal.duration * 0.8
+          ) {
+            this.audioService.playRandomHint(exercise.id);
+          }
+        }
+      })
+      .withOnComplete(() => {
+        this.onTimerComplete();
+      });
+  }
 
   startWorkout(exerciseSet: ExerciseSet) {
+    const exercise = this.createExerciseFromSet(exerciseSet, 0);
+
+    if ('duration' in exercise.goal) {
+      this.audioService.playExerciseIntro(exercise.id, exercise.goal.duration);
+    }
+
     this.workoutState.set({
-      exercise: undefined,
-      exerciseSet: exerciseSet,
+      exercise,
+      exerciseSet,
       state: {
         type: 'prepare',
         remainingMs: this.PREP_TIME_SECONDS * 1000,
       },
     });
-  }
-  startExerciseRecovery(): boolean {
-    const currentState = this.workoutState();
-    if (!currentState) {
-      return false;
-    }
-
-    const exercise = currentState.exercise;
-    if (!exercise) {
-      return false;
-    }
-
-    this.workoutState.set({
-      ...currentState,
-      state: {
-        type: 'recovery',
-        remainingMs: exercise.breakSeconds * 1000,
-      },
-    });
-    return true;
+    this.stopwatch.start(this.PREP_TIME_SECONDS * 1000);
   }
 
   startActiveExercise(index: number): boolean {
@@ -58,10 +92,12 @@ export class WorkoutService {
     }
 
     const exercise = currentState.exerciseSet.exercises[index];
+    this.audioService.playCountdownStart();
 
     if ('repetitions' in exercise.goal) {
       this.workoutState.set({
         ...currentState,
+        exercise: this.createExerciseFromSet(currentState.exerciseSet, index),
         state: {
           type: 'active',
           repetitions: exercise.goal.repetitions,
@@ -70,11 +106,13 @@ export class WorkoutService {
     } else if ('duration' in exercise.goal) {
       this.workoutState.set({
         ...currentState,
+        exercise: this.createExerciseFromSet(currentState.exerciseSet, index),
         state: {
           type: 'active',
           remainingMs: exercise.goal.duration * 1000,
         },
       });
+      this.stopwatch.start(exercise.goal.duration * 1000);
     } else {
       return false;
     }
@@ -96,11 +134,13 @@ export class WorkoutService {
 
     this.workoutState.set({
       ...currentState,
+      exercise: this.createExerciseFromSet(currentState.exerciseSet, index),
       state: {
         type: 'recovery',
         remainingMs: exercise.breakSeconds * 1000,
       },
     });
+    this.stopwatch.start(exercise.breakSeconds * 1000);
     return true;
   }
 
@@ -125,6 +165,43 @@ export class WorkoutService {
 
   cancelWorkout() {
     this.workoutState.set(undefined);
+  }
+
+  onTimerComplete() {
+    const currentState = this.workoutState();
+    if (!currentState) {
+      return;
+    }
+
+    if (currentState.state.type === 'prepare') {
+      this.startActiveExercise(0);
+    } else if (currentState.state.type === 'active') {
+      const nextIndex = this.nextExerciseIndex();
+      console.log('Next exercise index:', nextIndex);
+      if (nextIndex === 'completed') {
+        this.workoutState.set({
+          ...currentState,
+          exercise: undefined,
+          state: { type: 'finished' },
+        });
+      } else {
+        this.startRecovery(nextIndex);
+      }
+    } else if (currentState.state.type === 'recovery') {
+      this.startActiveExercise(currentState.exercise!.index as number);
+    }
+  }
+
+  createExerciseFromSet(exerciseSet: ExerciseSet, index: number): Exercise {
+    if (index < 0 || index >= exerciseSet.exercises.length) {
+      throw new Error('Index out of bounds');
+    }
+    const exercise = exerciseSet.exercises[index];
+    return {
+      ...exercise,
+      index: index,
+      id: exercise.id,
+    };
   }
 }
 

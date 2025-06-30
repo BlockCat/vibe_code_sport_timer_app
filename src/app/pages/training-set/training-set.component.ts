@@ -12,21 +12,28 @@ import {
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, ROUTER_OUTLET_DATA } from '@angular/router';
 import data from './data.json';
-import { SportTimerComponent } from './parts/sport-timer/sport-timer.component';
-import { Exercise, ExerciseSet, WorkoutService, WorkoutState } from '../../services/workout.service';
+import {
+  Exercise,
+  ExerciseSet,
+  WorkoutActiveTimerState,
+  WorkoutService,
+  WorkoutState,
+} from '../../services/workout.service';
+import { SportTimerDumbComponent } from './parts/sport-timer/sport-timer.dumb.component';
+import { SportPrepareComponent } from './parts/sport-prepare/sport-prepare.component';
+import { SportBreakComponent } from './parts/sport-break/sport-break.component';
+import { SportClickerComponent } from './parts/sport-clicker/sport-clicker.component';
 
 @Component({
   selector: 'app-training-set',
   standalone: true,
-  imports: [CommonModule, SportTimerComponent],
+  imports: [CommonModule, SportTimerDumbComponent, SportPrepareComponent, SportBreakComponent, SportClickerComponent],
   templateUrl: './training-set.component.html',
 })
 export class TrainingSetComponent implements OnDestroy {
-  
-  
   protected currentExercise: Signal<Exercise | undefined>;
   protected currentExerciseSet: Signal<ExerciseSet | undefined>;
-  protected workoutState: Signal<WorkoutState | undefined>;
+  protected workoutState: Signal<WorkoutState | undefined>;  
 
   constructor(route: ActivatedRoute, private workoutService: WorkoutService) {
     route.params.subscribe((params) => {
@@ -44,24 +51,53 @@ export class TrainingSetComponent implements OnDestroy {
     this.currentExercise = workoutService.currentExercise;
     this.currentExerciseSet = workoutService.currentExerciseSet;
     this.workoutState = workoutService.workoutState;
-  }  
+  }
   ngOnDestroy(): void {
     this.workoutService.cancelWorkout();
   }
-
 
   onExerciseComplete() {
     throw new Error('Method not implemented.');
   }
 
-
   private loadExerciseSetById(id: string): ExerciseSet | null {
-    const exerciseSet = data.workouts[id as keyof typeof data.workouts] as ExerciseSet;
+    const exerciseSet = data.workouts[
+      id as keyof typeof data.workouts
+    ] as ExerciseSet;
     if (!exerciseSet) {
       console.error(`Exercise set with id ${id} not found`);
       return null;
     }
 
     return exerciseSet;
+  }
+
+  asActivestate(state: WorkoutState): state is WorkoutState & {
+    exercise: { goal: { duration: number } };
+    state: WorkoutActiveTimerState;
+  } {
+    return state.state && state.state.type === 'active';
+  }
+
+  asPrepareState(state: WorkoutState): state is WorkoutState & {
+    state: { type: 'prepare' };
+  } {
+    return state.state && state.state.type === 'prepare';
+  }
+
+  asRecoveryState(state: WorkoutState): state is WorkoutState & {
+    state: { type: 'recovery' };
+  } {
+    return state.state && state.state.type === 'recovery';
+  }
+
+  startExercise() {
+    // this.workoutService.startActiveExercise(arg0);
+  }
+  pauseExercise() {
+    // this.workoutService.pause();
+  }
+  resumeExercise() {
+    // this.workoutService.resume();
   }
 }

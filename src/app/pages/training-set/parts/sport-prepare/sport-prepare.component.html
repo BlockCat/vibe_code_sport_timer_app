@@ -1,4 +1,4 @@
-<div class="relative px-4 bg-white shadow-xl sm:rounded-3xl sm:p-20">
+<div class="relative px-4 bg-white shadow-xl sm:rounded-3xl sm:p-20 w-full h-full">
   <div class="max-w-md mx-auto">
     <div class="divide-y divide-gray-200">
       <div
@@ -14,22 +14,16 @@
         <div>
           <app-exercise-details-card
             [exerciseName]="title(currentExercise().index)"
-            [durationSeconds]="currentExercise().goal.duration"            
+            [durationSeconds]="7"
+            [preparing]="true"
           />
         </div>
 
         <!-- Timer Display -->
         <div class="flex flex-col items-center justify-center py-6">
-          <app-timer
-            [remainingMs]="timesMsRemaining()"
-            [totalSeconds]="currentExercise().goal.duration"
-          />
+          <app-timer [remainingMs]="timesMsRemaining()" [totalSeconds]="7" />
           <div class="w-full max-w-xs mx-auto mt-4">
-            <app-exercise-controls
-              [state]="'active'"
-              (pause)="pauseExercise()"
-              (resume)="resumeExercise()"
-            />
+            <app-exercise-controls [state]="'prepare'" />
           </div>
         </div>
 

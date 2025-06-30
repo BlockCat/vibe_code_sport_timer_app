@@ -1,7 +1,15 @@
-@if(currentExercise() && currentExerciseSet()) {  
-<app-sport-timer
-  [currentExercise]="currentExercise()!"
-  [currentExerciseSet]="currentExerciseSet()!"
-  (exerciseComplete)="onExerciseComplete()"
-></app-sport-timer>
-}
+<div class="w-full h-full flex-1">
+  @if(workoutState(); as state) { @if(asActivestate(state)) {
+  <app-sport-timer-dumb
+    [state]="state"
+    (start)="startExercise()"
+    (pause)="pauseExercise()"
+    (resume)="resumeExercise()"
+  ></app-sport-timer-dumb>
+  } @else if (asPrepareState(state)) {
+  <app-sport-prepare [state]="state"></app-sport-prepare>
+
+  } @else if (asRecoveryState(state)){
+  <app-sport-break [state]="state"></app-sport-break>
+  } }
+</div>
