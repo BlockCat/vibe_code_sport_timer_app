@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
 })
 export class ExerciseSetInfoComponent {
   duration = input<number>(0);
-  exerciseCount = input<number>(0);
+  totalExercises = input<number>(0);
 }

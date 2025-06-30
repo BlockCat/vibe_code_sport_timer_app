@@ -211,62 +211,62 @@
             "duration": 3,
             "exercises": [
                 {
-                    "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "id": "left_quadriceps_stretch",                    
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 }, {
                     "id": "right_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 }
             ]
@@ -278,82 +278,82 @@
             "exercises": [
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "calf_stretch_left",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "calf_stretch_right",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "triceps_stretch_left",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "triceps_stretch_right",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "cobra_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "childs_pose",
-                    "activeSeconds": 40,
+                    "goal": {"duration": 40},
                     "breakSeconds": 7
                 },
                 {
                     "id": "bridge",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "lying_butterfly_stretch",
-                    "activeSeconds": 50,
+                    "goal": {"duration": 50},
                     "breakSeconds": 7
                 },
                 {
                     "id": "lying_twitch_stretch_left",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "lying_twitch_stretch_right",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 }
             ]
