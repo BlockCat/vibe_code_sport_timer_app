@@ -23,17 +23,25 @@ import { SportTimerDumbComponent } from './parts/sport-timer/sport-timer.dumb.co
 import { SportPrepareComponent } from './parts/sport-prepare/sport-prepare.component';
 import { SportBreakComponent } from './parts/sport-break/sport-break.component';
 import { SportClickerComponent } from './parts/sport-clicker/sport-clicker.component';
+import { SportCompleteComponent } from './parts/sport-complete/sport-complete.component';
 
 @Component({
   selector: 'app-training-set',
   standalone: true,
-  imports: [CommonModule, SportTimerDumbComponent, SportPrepareComponent, SportBreakComponent, SportClickerComponent],
+  imports: [
+    CommonModule,
+    SportTimerDumbComponent,
+    SportPrepareComponent,
+    SportBreakComponent,
+    SportClickerComponent,
+    SportCompleteComponent,
+  ],
   templateUrl: './training-set.component.html',
 })
 export class TrainingSetComponent implements OnDestroy {
   protected currentExercise: Signal<Exercise | undefined>;
   protected currentExerciseSet: Signal<ExerciseSet | undefined>;
-  protected workoutState: Signal<WorkoutState | undefined>;  
+  protected workoutState: Signal<WorkoutState | undefined>;
 
   constructor(route: ActivatedRoute, private workoutService: WorkoutService) {
     route.params.subscribe((params) => {
@@ -91,6 +99,23 @@ export class TrainingSetComponent implements OnDestroy {
     return state.state && state.state.type === 'recovery';
   }
 
+  asFinishedState(state: WorkoutState): state is WorkoutState & {
+    state: { type: 'finished' };
+  } {
+    return state.state && state.state.type === 'finished';
+  }
+
+  asActiveClickState(state: WorkoutState): state is WorkoutState & {
+    state: { type: 'active'; exercise: { goal: { repetitions: number } } };
+  } {
+    return (
+      state.state &&
+      state.state.type === 'active' &&
+      !!state.exercise &&
+      'repetitions' in state.exercise?.goal
+    );
+  }
+
   startExercise() {
     // this.workoutService.startActiveExercise(arg0);
   }
@@ -99,5 +124,8 @@ export class TrainingSetComponent implements OnDestroy {
   }
   resumeExercise() {
     // this.workoutService.resume();
+  }
+  finishExercise() {
+    this.workoutService.onTimerComplete();
   }
 }
