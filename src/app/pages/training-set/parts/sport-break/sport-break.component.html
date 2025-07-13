@@ -21,12 +21,16 @@
 
         <!-- Timer Display -->
         <div class="flex flex-col items-center justify-center py-6">
-          <app-timer
-            [remainingMs]="timesMsRemaining()"
-            [totalSeconds]="7"
-          />
+          <app-timer [remainingMs]="timesMsRemaining()" [totalSeconds]="7" />
           <div class="w-full max-w-xs mx-auto mt-4">
-            <app-exercise-controls [state]="'prepare'" (finish)="finish.emit()" />
+            <app-exercise-controls>
+              <app-exercise-control-button (click)="start.emit()">
+                Start
+              </app-exercise-control-button>
+              <app-exercise-control-button (click)="pause.emit()">
+                Pause
+              </app-exercise-control-button>
+            </app-exercise-controls>
           </div>
         </div>
 

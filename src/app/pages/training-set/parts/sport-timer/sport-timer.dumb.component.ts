@@ -13,6 +13,7 @@ import {
   WorkoutActiveTimerState,
   WorkoutState,
 } from '../../../../services/workout.service';
+import { ExerciseControlButtonComponent } from "../../../../components/exercise-controls/exercise-control-button/exercise-control-button.component";
 
 @Component({
   selector: 'app-sport-timer-dumb',
@@ -23,7 +24,8 @@ import {
     ExerciseControlsComponent,
     ExerciseProgressComponent,
     ExerciseSetInfoComponent,
-  ],
+    ExerciseControlButtonComponent
+],
   templateUrl: './sport-timer.dumb.component.html',
 })
 export class SportTimerDumbComponent {
@@ -37,6 +39,7 @@ export class SportTimerDumbComponent {
   currentExerciseSet = computed(() => this.state().exerciseSet);
   timesMsRemaining = computed(() => this.state().state.remainingMs);
 
+  isPaused = computed(() => this.state().state.isPaused);
 
   pause = output<void>();
   resume = output<void>();

@@ -10,6 +10,7 @@ import { ExerciseControlsComponent } from '../../../../components/exercise-contr
 import { ExerciseProgressComponent } from '../../../../components/exercise-progress/exercise-progress.component';
 import { ExerciseSetInfoComponent } from '../../../../components/exercise-set-info/exercise-set-info.component';
 import { ExerciseHeaderComponent } from '../../../../components/exercise-header/exercise-header.component';
+import { ExerciseControlButtonComponent } from "../../../../components/exercise-controls/exercise-control-button/exercise-control-button.component";
 
 @Component({
   selector: 'app-sport-prepare',
@@ -20,7 +21,8 @@ import { ExerciseHeaderComponent } from '../../../../components/exercise-header/
     ExerciseProgressComponent,
     ExerciseSetInfoComponent,
     ExerciseHeaderComponent,
-  ],
+    ExerciseControlButtonComponent
+],
   templateUrl: './sport-prepare.component.html',
 })
 export class SportPrepareComponent {
@@ -29,7 +31,7 @@ export class SportPrepareComponent {
       state: WorkoutPrepareState;
     }
   >();
-  finish = output<void>();
+  start = output<void>();
   currentExercise = computed(() => this.state().exercise!);
   currentExerciseSet = computed(() => this.state().exerciseSet);
   timesMsRemaining = computed(() => this.state().state.remainingMs);

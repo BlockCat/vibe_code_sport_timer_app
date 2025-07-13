@@ -14,7 +14,7 @@
         <div>
           <app-exercise-details-card
             [exerciseName]="title(currentExercise().index)"
-            [durationSeconds]="currentExercise().goal.duration"            
+            [durationSeconds]="currentExercise().goal.duration"
           />
         </div>
 
@@ -25,12 +25,20 @@
             [totalSeconds]="currentExercise().goal.duration"
           />
           <div class="w-full max-w-xs mx-auto mt-4">
-            <app-exercise-controls
-              [state]="state().state.isPaused ? 'pause' : 'active'"
-              (pause)="pauseExercise()"
-              (resume)="resumeExercise()"
-              (finish)="finish.emit()"
-            />
+            <app-exercise-controls>
+              <app-exercise-control-button (click)="finish.emit()">
+                Finish
+              </app-exercise-control-button>
+              @if (isPaused()) {
+              <app-exercise-control-button (click)="resumeExercise()">
+                Resume
+              </app-exercise-control-button>
+              } @else {
+              <app-exercise-control-button (click)="pauseExercise()">
+                Pause
+              </app-exercise-control-button>
+              }
+            </app-exercise-controls>
           </div>
         </div>
 

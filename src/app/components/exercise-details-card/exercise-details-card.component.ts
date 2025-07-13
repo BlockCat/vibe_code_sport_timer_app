@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
       <div class="grid grid-cols-2 gap-4">
         <div>
           <p class="text-sm text-gray-500">Exercise Name</p>
-          <p class="font-medium">
+          <p class="font-medium" id="exercise-name">
             @if (exerciseName()) {
             {{ exerciseName() }}
             } @else { Not started }
@@ -24,21 +24,11 @@ import { CommonModule } from '@angular/common';
         </div>
         <div>
           <p class="text-sm text-gray-500">Duration</p>
-          <p class="font-medium">
+          <p class="font-medium" id="exercise-duration">
             @if (durationSeconds()) {
             {{ durationSeconds() }} seconds } @else { - }
           </p>
         </div>
-        <!-- <div class="col-span-2">
-          <p class="text-sm text-gray-500">State</p>
-          <p class="font-medium">
-            @if (state()) {
-              {{ state() }}
-            } @else {
-              -
-            }
-          </p>
-        </div> -->
       </div>
     </div>
   `,
