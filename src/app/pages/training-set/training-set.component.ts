@@ -1,16 +1,6 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Output,
-  EventEmitter,
-  signal,
-  inject,
-  Signal,
-  computed,
-} from '@angular/core';
+import { Component, OnDestroy, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, ROUTER_OUTLET_DATA } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import data from './data.json';
 import {
   Exercise,
@@ -84,7 +74,12 @@ export class TrainingSetComponent implements OnDestroy {
     exercise: { goal: { duration: number } };
     state: WorkoutActiveTimerState;
   } {
-    return state.state && state.state.type === 'active' && !!state.exercise && 'duration' in state.exercise.goal;
+    return (
+      state.state &&
+      state.state.type === 'active' &&
+      !!state.exercise &&
+      'duration' in state.exercise.goal
+    );
   }
 
   asPrepareState(state: WorkoutState): state is WorkoutState & {
@@ -117,14 +112,20 @@ export class TrainingSetComponent implements OnDestroy {
   }
 
   startExercise() {
-    // this.workoutService.startActiveExercise(arg0);
+    const currentExercise = this.currentExercise();
+    if (currentExercise) {
+      this.workoutService.startActiveExercise(currentExercise.index);
+    }
   }
+  
   pauseExercise() {
-    // this.workoutService.pause();
+    this.workoutService.pause();
   }
+  
   resumeExercise() {
-    // this.workoutService.resume();
+    this.workoutService.resume();
   }
+  
   finishExercise() {
     this.workoutService.onTimerComplete();
   }

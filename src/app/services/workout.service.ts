@@ -105,43 +105,48 @@ export class WorkoutService {
   }
 
   startActiveExercise(index: number): boolean {
-    const currentState = this.workoutState();
-    if (!currentState) {
+    try {
+      const currentState = this.workoutState();
+      if (!currentState) {
+        return false;
+      }
+
+      if (index < 0 || index >= currentState.exerciseSet.exercises.length) {
+        return false;
+      }
+
+      const exercise = currentState.exerciseSet.exercises[index];
+      this.audioService.playCountdownStart();
+
+      if ('repetitions' in exercise.goal) {
+        this.workoutState.set({
+          ...currentState,
+          exercise: this.createExerciseFromSet(currentState.exerciseSet, index),
+          state: {
+            type: 'active',
+            repetitions: exercise.goal.repetitions,
+          },
+        });
+        this.stopwatch.stop();
+      } else if ('duration' in exercise.goal) {
+        this.workoutState.set({
+          ...currentState,
+          exercise: this.createExerciseFromSet(currentState.exerciseSet, index),
+          state: {
+            type: 'active',
+            remainingMs: exercise.goal.duration * 1000,
+          },
+        });
+        this.stopwatch.start(exercise.goal.duration * 1000);
+      } else {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      this.handleError(error, 'startActiveExercise');
       return false;
     }
-
-    if (index < 0 || index >= currentState.exerciseSet.exercises.length) {
-      return false;
-    }
-
-    const exercise = currentState.exerciseSet.exercises[index];
-    this.audioService.playCountdownStart();
-
-    if ('repetitions' in exercise.goal) {
-      this.workoutState.set({
-        ...currentState,
-        exercise: this.createExerciseFromSet(currentState.exerciseSet, index),
-        state: {
-          type: 'active',
-          repetitions: exercise.goal.repetitions,
-        },
-      });
-      this.stopwatch.stop();
-    } else if ('duration' in exercise.goal) {
-      this.workoutState.set({
-        ...currentState,
-        exercise: this.createExerciseFromSet(currentState.exerciseSet, index),
-        state: {
-          type: 'active',
-          remainingMs: exercise.goal.duration * 1000,
-        },
-      });
-      this.stopwatch.start(exercise.goal.duration * 1000);
-    } else {
-      return false;
-    }
-
-    return true;
   }
 
   startRecovery(index: number): boolean {
@@ -207,76 +212,89 @@ export class WorkoutService {
   }
 
   onTimerComplete(): void {
-    const currentState = this.workoutState();
-    if (!currentState) {
-      return;
-    }
+    try {
+      const currentState = this.workoutState();
+      if (!currentState) {
+        console.warn('Timer completed but no workout state available');
+        return;
+      }
 
-    switch (currentState.state.type) {
-      case 'prepare':
-        this.startActiveExercise(0);
-        break;
-      
-      case 'active':
-        const nextIndex = this.nextExerciseIndex();
-        if (nextIndex === 'completed') {
-          this.workoutState.set({
-            ...currentState,
-            exercise: undefined,
-            state: { type: 'finished' },
-          });
-        } else if (typeof nextIndex === 'number') {
-          this.startRecovery(nextIndex);
-        }
-        break;
-      
-      case 'recovery':
-        if (currentState.exercise) {
-          this.startActiveExercise(currentState.exercise.index);
-        }
-        break;
-      
-      default:
-        console.error('Invalid state transition:', currentState.state.type);
+      switch (currentState.state.type) {
+        case 'prepare':
+          this.startActiveExercise(0);
+          break;
+        
+        case 'active':
+          const nextIndex = this.nextExerciseIndex();
+          if (nextIndex === 'completed') {
+            this.workoutState.set({
+              ...currentState,
+              exercise: undefined,
+              state: { type: 'finished' },
+            });
+          } else if (typeof nextIndex === 'number') {
+            this.startRecovery(nextIndex);
+          }
+          break;
+        
+        case 'recovery':
+          if (currentState.exercise) {
+            this.startActiveExercise(currentState.exercise.index);
+          }
+          break;
+        
+        default:
+          console.error('Invalid state transition:', currentState.state.type);
+      }
+    } catch (error) {
+      this.handleError(error, 'onTimerComplete');
     }
   }
 
   pause(): void {
-    const currentState = this.workoutState();
-    if (!currentState || currentState.state.type !== 'active') {
-      return;
+    try {
+      const currentState = this.workoutState();
+      if (!currentState || currentState.state.type !== 'active') {
+        return;
+      }
+      
+      this.stopwatch.pause();
+      this.workoutState.update(state => {
+        if (!state || state.state.type !== 'active') return state;
+        return {
+          ...state,
+          state: {
+            ...state.state,
+            isPaused: true
+          }
+        };
+      });
+    } catch (error) {
+      this.handleError(error, 'pause');
     }
-    
-    this.stopwatch.pause();
-    this.workoutState.update(state => {
-      if (!state || state.state.type !== 'active') return state;
-      return {
-        ...state,
-        state: {
-          ...state.state,
-          isPaused: true
-        }
-      };
-    });
   }
 
   resume(): void {
-    const currentState = this.workoutState();
-    if (!currentState || currentState.state.type !== 'active') {
-      return;
+    try {
+      const currentState = this.workoutState();
+      if (!currentState || currentState.state.type !== 'active') {
+        return;
+      }
+      
+      this.stopwatch.resume();
+      this.workoutState.update(state => {
+        if (!state || state.state.type !== 'active') return state;
+        return {
+          ...state,
+          state: {
+            ...state.state,
+            isPaused: false
+          }
+        };
+      });
+    } catch (error) {
+      this.handleError(error, 'resume');
     }
-    
-    this.stopwatch.resume();
-    this.workoutState.update(state => {
-      if (!state || state.state.type !== 'active') return state;
-      return {
-        ...state,
-        state: {
-          ...state.state,
-          isPaused: false
-        }
-      };
-    });
   }
 
   createExerciseFromSet(exerciseSet: ExerciseSet, index: number): Exercise {
@@ -339,11 +357,3 @@ export interface Exercise {
   goal: { duration: number } | { repetitions: number };
   breakSeconds: number;
 }
-
-// export enum ExerciseState {
-//   Prepare = 'prepare',
-//   Active = 'active',
-//   Recovery = 'recovery',
-//   Pause = 'pause',
-//   Finished = 'finished'
-// }
