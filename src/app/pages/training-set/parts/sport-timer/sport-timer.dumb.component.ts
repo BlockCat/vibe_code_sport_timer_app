@@ -38,8 +38,8 @@ export class SportTimerDumbComponent {
   timesMsRemaining = computed(() => this.state().state.remainingMs);
 
 
-  onPauseExercise = output<void>();
-  onResumeExercise = output<void>();
+  pause = output<void>();
+  resume = output<void>();
   finish = output<void>();
 
   title(id: number): string {
@@ -48,9 +48,9 @@ export class SportTimerDumbComponent {
   }
 
   pauseExercise() {
-    this.onPauseExercise.emit();
+    this.pause.emit();
   }
   resumeExercise() {
-    this.onResumeExercise.emit();
+    this.resume.emit();
   }
 }

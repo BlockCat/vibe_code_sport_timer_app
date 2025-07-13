@@ -26,7 +26,7 @@
           />
           <div class="w-full max-w-xs mx-auto mt-4">
             <app-exercise-controls
-              [state]="'active'"
+              [state]="state().state.isPaused ? 'pause' : 'active'"
               (pause)="pauseExercise()"
               (resume)="resumeExercise()"
               (finish)="finish.emit()"
