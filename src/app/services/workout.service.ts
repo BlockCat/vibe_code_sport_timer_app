@@ -20,76 +20,88 @@ export class WorkoutService {
   constructor(timerService: TimerService, private audioService: AudioService) {
     this.stopwatch = timerService
       .begin()
-      .withOnTick((rms) => {
+      .withOnTick((remainingMs) => {
         this.workoutState.update((state) => {
-          if (state === undefined) {
+          if (!state || !('remainingMs' in state.state)) {
             return state;
           }
-          if ('remainingMs' in state.state) {
-            return {
-              ...state,
-              state: {
-                ...state.state,
-                remainingMs: rms,
-              },
-            };
-          }
-          return state;
+          return {
+            ...state,
+            state: {
+              ...state.state,
+              remainingMs,
+            },
+          };
         });
-        console.log('Timer tick:', rms);
       })
-      .withOnSecondTick((rms) => {
-        console.log('Timer second tick:', rms);
-        audioService.playCountdown(rms);
-
+      .withOnSecondTick((secondsRemaining) => {
         const exercise = this.currentExercise();
-        if (exercise && 'duration' in exercise.goal) {
-          if (
-            exercise?.goal.duration > 20 &&
-            rms === Math.floor(exercise.goal.duration / 2)
-          ) {
-            this.audioService.playHalfway();
-          }
-          if (
-            exercise.goal.duration > 20 &&
-            rms === exercise.goal.duration * 0.8
-          ) {
-            this.audioService.playRandomHint(exercise.id);
-          }
+        if (!exercise || !('duration' in exercise.goal)) {
+          return;
+        }
+
+        // Countdown audio
+        if (secondsRemaining <= 3 && secondsRemaining > 0) {
+          this.audioService.playCountdown(secondsRemaining);
+        }
+
+        // Halfway audio
+        const halfwayPoint = Math.floor(exercise.goal.duration / 2);
+        if (exercise.goal.duration > 20 && secondsRemaining === halfwayPoint) {
+          this.audioService.playHalfway();
+        }
+
+        // Hint audio
+        const hintPoint = Math.floor(exercise.goal.duration * 0.8);
+        if (exercise.goal.duration > 20 && secondsRemaining === hintPoint) {
+          this.audioService.playRandomHint(exercise.id);
         }
       })
       .withOnComplete(() => {
         this.onTimerComplete();
       });
+  }  private handleError(error: unknown, context: string): void {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`Workout Service Error [${context}]:`, errorMessage);
+    // Reset to safe state
+    this.cancelWorkout();
   }
 
-  startWorkout(exerciseSet: ExerciseSet) {
-    const exercise = this.createExerciseFromSet(exerciseSet, 0);
+  startWorkout(exerciseSet: ExerciseSet): void {
+    try {
+      if (!exerciseSet?.exercises?.length) {
+        throw new Error('Invalid exercise set: no exercises found');
+      }
 
-    if ('duration' in exercise.goal) {
-      this.audioService.playExerciseIntro(
-        exercise.id,
-        exercise.goal.duration,
-        false
-      );
-    }
-    if ('repetitions' in exercise.goal) {
-      this.audioService.playExerciseIntro(
-        exercise.id,
-        exercise.goal.repetitions,
-        true
-      );
-    }
+      const exercise = this.createExerciseFromSet(exerciseSet, 0);
 
-    this.workoutState.set({
-      exercise,
-      exerciseSet,
-      state: {
-        type: 'prepare',
-        remainingMs: this.PREP_TIME_SECONDS * 1000,
-      },
-    });
-    this.stopwatch.start(this.PREP_TIME_SECONDS * 1000);
+      if ('duration' in exercise.goal) {
+        this.audioService.playExerciseIntro(
+          exercise.id,
+          exercise.goal.duration,
+          false
+        );
+      }
+      if ('repetitions' in exercise.goal) {
+        this.audioService.playExerciseIntro(
+          exercise.id,
+          exercise.goal.repetitions,
+          true
+        );
+      }
+
+      this.workoutState.set({
+        exercise,
+        exerciseSet,
+        state: {
+          type: 'prepare',
+          remainingMs: this.PREP_TIME_SECONDS * 1000,
+        },
+      });
+      this.stopwatch.start(this.PREP_TIME_SECONDS * 1000);
+    } catch (error) {
+      this.handleError(error, 'startWorkout');
+    }
   }
 
   startActiveExercise(index: number): boolean {
@@ -194,29 +206,77 @@ export class WorkoutService {
     this.workoutState.set(undefined);
   }
 
-  onTimerComplete() {
+  onTimerComplete(): void {
     const currentState = this.workoutState();
     if (!currentState) {
       return;
     }
 
-    if (currentState.state.type === 'prepare') {
-      this.startActiveExercise(0);
-    } else if (currentState.state.type === 'active') {
-      const nextIndex = this.nextExerciseIndex();
-      console.log('Next exercise index:', nextIndex);
-      if (nextIndex === 'completed') {
-        this.workoutState.set({
-          ...currentState,
-          exercise: undefined,
-          state: { type: 'finished' },
-        });
-      } else {
-        this.startRecovery(nextIndex);
-      }
-    } else if (currentState.state.type === 'recovery') {
-      this.startActiveExercise(currentState.exercise!.index as number);
+    switch (currentState.state.type) {
+      case 'prepare':
+        this.startActiveExercise(0);
+        break;
+      
+      case 'active':
+        const nextIndex = this.nextExerciseIndex();
+        if (nextIndex === 'completed') {
+          this.workoutState.set({
+            ...currentState,
+            exercise: undefined,
+            state: { type: 'finished' },
+          });
+        } else if (typeof nextIndex === 'number') {
+          this.startRecovery(nextIndex);
+        }
+        break;
+      
+      case 'recovery':
+        if (currentState.exercise) {
+          this.startActiveExercise(currentState.exercise.index);
+        }
+        break;
+      
+      default:
+        console.error('Invalid state transition:', currentState.state.type);
     }
+  }
+
+  pause(): void {
+    const currentState = this.workoutState();
+    if (!currentState || currentState.state.type !== 'active') {
+      return;
+    }
+    
+    this.stopwatch.pause();
+    this.workoutState.update(state => {
+      if (!state || state.state.type !== 'active') return state;
+      return {
+        ...state,
+        state: {
+          ...state.state,
+          isPaused: true
+        }
+      };
+    });
+  }
+
+  resume(): void {
+    const currentState = this.workoutState();
+    if (!currentState || currentState.state.type !== 'active') {
+      return;
+    }
+    
+    this.stopwatch.resume();
+    this.workoutState.update(state => {
+      if (!state || state.state.type !== 'active') return state;
+      return {
+        ...state,
+        state: {
+          ...state.state,
+          isPaused: false
+        }
+      };
+    });
   }
 
   createExerciseFromSet(exerciseSet: ExerciseSet, index: number): Exercise {
@@ -256,6 +316,7 @@ export interface WorkoutRecoveryState extends TimedState {
 }
 export interface WorkoutActiveTimerState extends TimedState {
   type: 'active';
+  isPaused?: boolean;
 }
 export interface WorkoutActiveClickerState {
   type: 'active';
