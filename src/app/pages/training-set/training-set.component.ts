@@ -46,7 +46,7 @@ export class TrainingSetComponent implements OnDestroy {
           console.error(`Exercise set with id ${id} not found`);
           return;
         }
-        this.workoutService.startWorkout(exerciseSet);
+        this.workoutService.startWorkout(exerciseSet, id);
       }
     });
 

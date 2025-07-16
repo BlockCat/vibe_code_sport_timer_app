@@ -1,6 +1,7 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 import { Stopwatch, TimerService } from '../utils/timer.service';
 import { AudioService } from './audio.service';
+import { WorkoutStreakService } from './workout-streak.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class WorkoutService {
     () => this.workoutState()?.exerciseSet.exercises.length || 0
   );
 
-  constructor(timerService: TimerService, private audioService: AudioService) {
+  constructor(timerService: TimerService, private audioService: AudioService, private workoutStreakService: WorkoutStreakService) {
     this.stopwatch = timerService
       .begin()
       .withOnTick((remainingMs) => {
@@ -67,7 +68,7 @@ export class WorkoutService {
     this.cancelWorkout();
   }
 
-  startWorkout(exerciseSet: ExerciseSet): void {
+  startWorkout(exerciseSet: ExerciseSet, workoutId?: string): void {
     try {
       if (!exerciseSet?.exercises?.length) {
         throw new Error('Invalid exercise set: no exercises found');
@@ -91,6 +92,7 @@ export class WorkoutService {
       }
 
       this.workoutState.set({
+        workoutId,
         exercise,
         exerciseSet,
         state: {
@@ -227,6 +229,11 @@ export class WorkoutService {
         case 'active':
           const nextIndex = this.nextExerciseIndex();
           if (nextIndex === 'completed') {
+            // Record workout completion for streak tracking
+            if (currentState.workoutId) {
+              this.workoutStreakService.recordWorkoutCompletion(currentState.workoutId);
+            }
+            
             this.workoutState.set({
               ...currentState,
               exercise: undefined,
@@ -311,6 +318,7 @@ export class WorkoutService {
 }
 
 export interface WorkoutState {
+  workoutId?: string;
   exercise?: Exercise;
   exerciseSet: ExerciseSet;
   state: WorkoutStateType;
@@ -344,7 +352,7 @@ export interface WorkoutFinishedState {
   type: 'finished';
 }
 
-export interface ExerciseSet {
+export interface ExerciseSet {  
   title: string;
   description: string;
   duration: number;
