@@ -8,6 +8,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './workout-completion.component.html'
 })
 export class WorkoutCompletionComponent {
-  startAgain = output<void>();
+  
   exit = output<void>();
 }

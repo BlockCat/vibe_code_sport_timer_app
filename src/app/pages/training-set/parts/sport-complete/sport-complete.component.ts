@@ -1,12 +1,13 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import {
   WorkoutFinishedState,
   WorkoutState,
 } from '../../../../services/workout.service';
+import { WorkoutCompletionComponent } from "../../../../components/workout-completion/workout-completion.component";
 
 @Component({
   selector: 'app-sport-complete',
-  imports: [],
+  imports: [WorkoutCompletionComponent],
   templateUrl: './sport-complete.component.html',
 })
 export class SportCompleteComponent {
@@ -16,4 +17,6 @@ export class SportCompleteComponent {
     }
   >();
   currentExerciseSet = computed(() => this.state().exerciseSet);
+
+  exit = output<void>();
 }

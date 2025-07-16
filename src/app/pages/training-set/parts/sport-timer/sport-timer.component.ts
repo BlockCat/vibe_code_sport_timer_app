@@ -16,7 +16,7 @@ import {
 import { ExerciseControlButtonComponent } from "../../../../components/exercise-controls/exercise-control-button/exercise-control-button.component";
 
 @Component({
-  selector: 'app-sport-timer-dumb',
+  selector: 'app-sport-timer',
   imports: [
     ExerciseHeaderComponent,
     ExerciseDetailsCardComponent,
@@ -26,7 +26,7 @@ import { ExerciseControlButtonComponent } from "../../../../components/exercise-
     ExerciseSetInfoComponent,
     ExerciseControlButtonComponent
 ],
-  templateUrl: './sport-timer.dumb.component.html',
+  templateUrl: './sport-timer.component.html',
 })
 export class SportTimerDumbComponent {
   state = input.required<

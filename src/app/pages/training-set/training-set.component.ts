@@ -1,6 +1,6 @@
 import { Component, OnDestroy, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import data from './data.json';
 import {
   Exercise,
@@ -9,7 +9,7 @@ import {
   WorkoutService,
   WorkoutState,
 } from '../../services/workout.service';
-import { SportTimerDumbComponent } from './parts/sport-timer/sport-timer.dumb.component';
+import { SportTimerDumbComponent } from './parts/sport-timer/sport-timer.component';
 import { SportPrepareComponent } from './parts/sport-prepare/sport-prepare.component';
 import { SportBreakComponent } from './parts/sport-break/sport-break.component';
 import { SportClickerComponent } from './parts/sport-clicker/sport-clicker.component';
@@ -33,7 +33,11 @@ export class TrainingSetComponent implements OnDestroy {
   protected currentExerciseSet: Signal<ExerciseSet | undefined>;
   protected workoutState: Signal<WorkoutState | undefined>;
 
-  constructor(route: ActivatedRoute, private workoutService: WorkoutService) {
+  constructor(
+    route: ActivatedRoute,
+    private router: Router,
+    private workoutService: WorkoutService
+  ) {
     route.params.subscribe((params) => {
       const id = params['id'];
       if (id) {
@@ -117,16 +121,21 @@ export class TrainingSetComponent implements OnDestroy {
       this.workoutService.startActiveExercise(currentExercise.index);
     }
   }
-  
+
   pauseExercise() {
     this.workoutService.pause();
   }
-  
+
   resumeExercise() {
     this.workoutService.resume();
   }
-  
+
   finishExercise() {
     this.workoutService.onTimerComplete();
+  }
+
+  exitExerciseSet() {
+    this.workoutService.cancelWorkout();
+    this.router.navigate(['/']);
   }
 }
