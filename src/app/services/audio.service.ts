@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import data from '../pages/training-set/data.json';
+import { DataService } from '../utils/data.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +7,7 @@ import data from '../pages/training-set/data.json';
 export class AudioService {
   private readonly playbackRate = 1.1;
 
-  constructor() {}
+  constructor(private dataService: DataService) {}
 
   playExerciseIntro(
     exerciseId: string,
@@ -36,8 +36,7 @@ export class AudioService {
   }
 
   playRandomHint(exerciseId: string): void {
-    const hints =
-      data.exercises[exerciseId as keyof typeof data.exercises]?.hints;
+    const hints = this.dataService.hints(exerciseId);
     if (hints && hints.length > 0) {
       const random = Math.floor(Math.random() * hints.length);
       const hint = hints[random].id;

@@ -18,7 +18,11 @@ export class WorkoutService {
     () => this.workoutState()?.exerciseSet.exercises.length || 0
   );
 
-  constructor(timerService: TimerService, private audioService: AudioService, private workoutStreakService: WorkoutStreakService) {
+  constructor(
+    timerService: TimerService,
+    private audioService: AudioService,
+    private workoutStreakService: WorkoutStreakService
+  ) {
     this.stopwatch = timerService
       .begin()
       .withOnTick((remainingMs) => {
@@ -59,9 +63,10 @@ export class WorkoutService {
         }
       })
       .withOnComplete(() => {
-        this.onTimerComplete();
+        this.finishExerciseAndStartRecovery();
       });
-  }  private handleError(error: unknown, context: string): void {
+  }
+  private handleError(error: unknown, context: string): void {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.error(`Workout Service Error [${context}]:`, errorMessage);
     // Reset to safe state
@@ -213,27 +218,28 @@ export class WorkoutService {
     this.workoutState.set(undefined);
   }
 
-  onTimerComplete(): void {
+  finishExerciseAndStartRecovery(): void {
     try {
       const currentState = this.workoutState();
       if (!currentState) {
         console.warn('Timer completed but no workout state available');
         return;
       }
-
       switch (currentState.state.type) {
         case 'prepare':
           this.startActiveExercise(0);
           break;
-        
+
         case 'active':
           const nextIndex = this.nextExerciseIndex();
           if (nextIndex === 'completed') {
             // Record workout completion for streak tracking
             if (currentState.workoutId) {
-              this.workoutStreakService.recordWorkoutCompletion(currentState.workoutId);
+              this.workoutStreakService.recordWorkoutCompletion(
+                currentState.workoutId
+              );
             }
-            
+
             this.workoutState.set({
               ...currentState,
               exercise: undefined,
@@ -243,13 +249,13 @@ export class WorkoutService {
             this.startRecovery(nextIndex);
           }
           break;
-        
+
         case 'recovery':
           if (currentState.exercise) {
             this.startActiveExercise(currentState.exercise.index);
           }
           break;
-        
+
         default:
           console.error('Invalid state transition:', currentState.state.type);
       }
@@ -261,19 +267,19 @@ export class WorkoutService {
   pause(): void {
     try {
       const currentState = this.workoutState();
-      if (!currentState || currentState.state.type !== 'active') {
+      if (!currentState || !this.canPause(currentState.state)) {
         return;
       }
-      
+
       this.stopwatch.pause();
-      this.workoutState.update(state => {
-        if (!state || state.state.type !== 'active') return state;
+      this.workoutState.update((state) => {
+        if (!state || !this.canPause(state.state)) return state;
         return {
           ...state,
           state: {
             ...state.state,
-            isPaused: true
-          }
+            isPaused: true,
+          },
         };
       });
     } catch (error) {
@@ -284,19 +290,19 @@ export class WorkoutService {
   resume(): void {
     try {
       const currentState = this.workoutState();
-      if (!currentState || currentState.state.type !== 'active') {
+      if (!currentState || !this.canPause(currentState.state)) {
         return;
       }
-      
+
       this.stopwatch.resume();
-      this.workoutState.update(state => {
-        if (!state || state.state.type !== 'active') return state;
+      this.workoutState.update((state) => {
+        if (!state || !this.canPause(state.state)) return state;
         return {
           ...state,
           state: {
             ...state.state,
-            isPaused: false
-          }
+            isPaused: false,
+          },
         };
       });
     } catch (error) {
@@ -314,6 +320,10 @@ export class WorkoutService {
       index: index,
       id: exercise.id,
     };
+  }
+
+  private canPause(stateType: WorkoutStateType): boolean {
+    return ['active', 'recovery'].includes(stateType.type);
   }
 }
 
@@ -339,6 +349,7 @@ export interface WorkoutPrepareState extends TimedState {
 }
 export interface WorkoutRecoveryState extends TimedState {
   type: 'recovery';
+  isPaused?: boolean;
 }
 export interface WorkoutActiveTimerState extends TimedState {
   type: 'active';
@@ -352,7 +363,7 @@ export interface WorkoutFinishedState {
   type: 'finished';
 }
 
-export interface ExerciseSet {  
+export interface ExerciseSet {
   title: string;
   description: string;
   duration: number;

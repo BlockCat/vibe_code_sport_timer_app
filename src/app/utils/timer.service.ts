@@ -48,11 +48,6 @@ export class Stopwatch {
   secondTickEffect = effect(() => {
     this.onSecondTick(this.remainingSeconds());
   });
-  completedEffect = effect(() => {
-    if (this.completed() == true) {
-      this.onComplete();
-    }
-  });
 
   onTick: (remainingMs: number) => void = () => {};
   onSecondTick: (remainingMs: number) => void = () => {};
@@ -81,10 +76,12 @@ export class Stopwatch {
 
     this.timer = setInterval(() => {
       if (this._remainingMs() <= 0) {
-        this._completed.set(true);
-        this.onTick(0);        
-        this.stop();
-        this.onComplete();
+        if (!this._completed()) {
+          this.onTick(0);
+          this.stop();
+          this.onComplete();
+          this._completed.set(true);
+        }
         return;
       }
 

@@ -26,7 +26,7 @@
           <app-timer [remainingMs]="timesMsRemaining()" [totalSeconds]="7" />
           <div class="w-full max-w-xs mx-auto mt-4">
             <app-exercise-controls>
-              <app-exercise-control-button (click)="start.emit()">
+              <app-exercise-control-button (pressed)="start.emit()">
                 Start
               </app-exercise-control-button>
             </app-exercise-controls>

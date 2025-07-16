@@ -1,7 +1,7 @@
 import { Component, OnDestroy, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import data from './data.json';
+import data from '../../../data.json';
 import {
   Exercise,
   ExerciseSet,
@@ -11,7 +11,7 @@ import {
 } from '../../services/workout.service';
 import { SportTimerDumbComponent } from './parts/sport-timer/sport-timer.component';
 import { SportPrepareComponent } from './parts/sport-prepare/sport-prepare.component';
-import { SportBreakComponent } from './parts/sport-break/sport-break.component';
+import { SportRecoveryComponent } from './parts/sport-recovery/sport-recovery.component';
 import { SportClickerComponent } from './parts/sport-clicker/sport-clicker.component';
 import { SportCompleteComponent } from './parts/sport-complete/sport-complete.component';
 
@@ -22,7 +22,7 @@ import { SportCompleteComponent } from './parts/sport-complete/sport-complete.co
     CommonModule,
     SportTimerDumbComponent,
     SportPrepareComponent,
-    SportBreakComponent,
+    SportRecoveryComponent,
     SportClickerComponent,
     SportCompleteComponent,
   ],
@@ -98,7 +98,7 @@ export class TrainingSetComponent implements OnDestroy {
     return state.state && state.state.type === 'recovery';
   }
 
-  asFinishedState(state: WorkoutState): state is WorkoutState & {
+  asCompletedState(state: WorkoutState): state is WorkoutState & {
     state: { type: 'finished' };
   } {
     return state.state && state.state.type === 'finished';
@@ -131,7 +131,8 @@ export class TrainingSetComponent implements OnDestroy {
   }
 
   finishExercise() {
-    this.workoutService.onTimerComplete();
+    console.log("Finishing exercise and starting recovery");
+    this.workoutService.finishExerciseAndStartRecovery();
   }
 
   exitExerciseSet() {

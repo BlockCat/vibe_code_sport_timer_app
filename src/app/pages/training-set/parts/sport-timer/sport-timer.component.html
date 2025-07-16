@@ -26,15 +26,15 @@
           />
           <div class="w-full max-w-xs mx-auto mt-4">
             <app-exercise-controls>
-              <app-exercise-control-button (click)="finish.emit()">
+              <app-exercise-control-button (pressed)="finish.emit()">
                 Finish
               </app-exercise-control-button>
               @if (isPaused()) {
-              <app-exercise-control-button (click)="resumeExercise()">
+              <app-exercise-control-button (pressed)="resumeExercise()">
                 Resume
               </app-exercise-control-button>
               } @else {
-              <app-exercise-control-button (click)="pauseExercise()">
+              <app-exercise-control-button (pressed)="pauseExercise()">
                 Pause
               </app-exercise-control-button>
               }

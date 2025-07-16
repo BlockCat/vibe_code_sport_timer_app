@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="flex justify-center space-x-4 mt-4">
-      <slot></slot>
+      <ng-content></ng-content>
     </div>
   `,
 })

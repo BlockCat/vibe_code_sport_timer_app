@@ -8,12 +8,23 @@
     (finish)="finishExercise()"
   ></app-sport-timer>
   } @else if (asPrepareState(state)) {
-  <app-sport-prepare [state]="state" (finish)="finishExercise()"></app-sport-prepare>
+  <app-sport-prepare
+    [state]="state"
+    (start)="startExercise()"
+  ></app-sport-prepare>
 
   } @else if (asRecoveryState(state)){
-  <app-sport-break [state]="state" (finish)="finishExercise()"></app-sport-break>
-  } @else if (asFinishedState(state)) {
-  <app-sport-complete [state]="state" (exit)="exitExerciseSet()"></app-sport-complete>
+  <app-sport-recovery
+    [state]="state"
+    (start)="startExercise()"
+    (pause)="pauseExercise()"
+    (resume)="resumeExercise()"
+  ></app-sport-recovery>
+  } @else if (asCompletedState(state)) {
+  <app-sport-complete
+    [state]="state"
+    (exit)="exitExerciseSet()"
+  ></app-sport-complete>
   } @else if (asActiveClickState(state)) {
   <app-sport-clicker [state]="state" (finish)="finishExercise()" />
 

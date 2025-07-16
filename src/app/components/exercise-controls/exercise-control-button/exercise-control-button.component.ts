@@ -8,5 +8,12 @@ import { Component, input, output } from '@angular/core';
 export class ExerciseControlButtonComponent {
   disabled = input<boolean>(false);
 
-  click = output<void>();
+  pressed = output<void>();
+
+  onClick() {
+    if (!this.disabled()) {
+      console.log("Button clicked");
+      this.pressed.emit();
+    }
+  }
 }

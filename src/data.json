@@ -246,7 +246,7 @@
             ]
         }
     },
-    "workouts": {
+    "workouts": {       
         "leg_stretch": {
             "title": "Quadriceps leg stretch",
             "description": "Stretch the quadriceps legs",

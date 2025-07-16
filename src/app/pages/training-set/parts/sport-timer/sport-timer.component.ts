@@ -1,19 +1,16 @@
 import { Component, computed, input, output } from '@angular/core';
 import { ExerciseHeaderComponent } from '../../../../components/exercise-header/exercise-header.component';
 import { ExerciseDetailsCardComponent } from '../../../../components/exercise-details-card/exercise-details-card.component';
-import data from '../../data.json';
 import { TimerComponent } from '../../../../timer/timer.component';
 import { ExerciseControlsComponent } from '../../../../components/exercise-controls/exercise-controls.component';
 import { ExerciseProgressComponent } from '../../../../components/exercise-progress/exercise-progress.component';
 import { ExerciseSetInfoComponent } from '../../../../components/exercise-set-info/exercise-set-info.component';
-import { ScheduleWorkoutComponent } from '../../../../components/schedule-workout/schedule-workout.component';
 import {
-  Exercise,
-  ExerciseSet,
   WorkoutActiveTimerState,
   WorkoutState,
 } from '../../../../services/workout.service';
-import { ExerciseControlButtonComponent } from "../../../../components/exercise-controls/exercise-control-button/exercise-control-button.component";
+import { ExerciseControlButtonComponent } from '../../../../components/exercise-controls/exercise-control-button/exercise-control-button.component';
+import { DataService } from '../../../../utils/data.helper';
 
 @Component({
   selector: 'app-sport-timer',
@@ -24,8 +21,8 @@ import { ExerciseControlButtonComponent } from "../../../../components/exercise-
     ExerciseControlsComponent,
     ExerciseProgressComponent,
     ExerciseSetInfoComponent,
-    ExerciseControlButtonComponent
-],
+    ExerciseControlButtonComponent,
+  ],
   templateUrl: './sport-timer.component.html',
 })
 export class SportTimerDumbComponent {
@@ -45,9 +42,11 @@ export class SportTimerDumbComponent {
   resume = output<void>();
   finish = output<void>();
 
+  constructor(private dataService: DataService) {}
+
   title(id: number): string {
     const exercise_id = this.currentExerciseSet().exercises[id].id;
-    return data.exercises[exercise_id as keyof typeof data.exercises].title;
+    return this.dataService.title(exercise_id);
   }
 
   pauseExercise() {
