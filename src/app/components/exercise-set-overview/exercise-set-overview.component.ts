@@ -11,6 +11,7 @@ export class ExerciseSetOverviewComponent {
   description = input<string>('');
   estimatedTime = input<number>(0); // in minutes
   timesPerDay = input<number | undefined>();
+  currentStreak = input<number>(0);
   
   clicked = output<void>();
 
