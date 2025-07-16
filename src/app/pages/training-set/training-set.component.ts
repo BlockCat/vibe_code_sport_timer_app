@@ -58,10 +58,6 @@ export class TrainingSetComponent implements OnDestroy {
     this.workoutService.cancelWorkout();
   }
 
-  onExerciseComplete() {
-    throw new Error('Method not implemented.');
-  }
-
   private loadExerciseSetById(id: string): ExerciseSet | null {
     const exerciseSet = data.workouts[
       id as keyof typeof data.workouts

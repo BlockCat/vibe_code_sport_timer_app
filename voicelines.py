@@ -58,7 +58,7 @@ class TrainingData:
         return result
 def read_messages():
     messages = []
-    with open("src/app/pages/training-set/data.json") as r:
+    with open("src/data.json") as r:
         # Use TrainingData class to parse the JSON
         training_data = TrainingData.from_dict(json.load(r))
         print(training_data)
