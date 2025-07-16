@@ -119,6 +119,34 @@
                 }
             ]
         },
+        "left_stand_on_leg": {
+            "title": "Left stand on leg",
+            "description": "Stand on your right leg, lift your left foot off the ground, and balance. Engage your core and keep your posture straight. Hold for the duration.",
+            "hints": [
+                {
+                    "id": "left_stand_on_leg_engage_core",
+                    "voice": "Engage your core for balance"
+                },
+                {
+                    "id": "left_stand_on_leg_keep_posture",
+                    "voice": "Keep your posture straight"
+                }
+            ]
+        },
+        "right_stand_on_leg": {
+            "title": "Right stand on leg",
+            "description": "Stand on your left leg, lift your right foot off the ground, and balance. Engage your core and keep your posture straight. Hold for the duration.",
+            "hints": [
+                {
+                    "id": "right_stand_on_leg_engage_core",
+                    "voice": "Engage your core for balance"
+                },
+                {
+                    "id": "right_stand_on_leg_keep_posture",
+                    "voice": "Keep your posture straight"
+                }
+            ]
+        },
         "cobra_stretch": {
             "title": "Cobra stretch",
             "description": "Lie face down, place your hands under your shoulders, and press up, lifting your chest. Keep your hips on the ground. Feel the stretch in your abdomen and lower back.",
@@ -130,6 +158,20 @@
                 {
                     "id": "cobra_stretch_open_chest",
                     "voice": "Open your chest forward"
+                }
+            ]
+        },
+        "cat_cow_pose": {
+            "title": "Cat-Cow pose",
+            "description": "Start on all fours, arch your back up (cat), then lower your belly and lift your head (cow). Alternate between these two positions to stretch your spine.",
+            "hints": [
+                {
+                    "id": "cat_cow_arch_back",
+                    "voice": "Arch your back like a cat"
+                },
+                {
+                    "id": "cat_cow_lower_belly",
+                    "voice": "Lower your belly and lift your head"
                 }
             ]
         },
@@ -204,69 +246,99 @@
             ]
         }
     },
-    "workouts": {
+    "workouts": {       
         "leg_stretch": {
             "title": "Quadriceps leg stretch",
             "description": "Stretch the quadriceps legs",
             "duration": 3,
             "exercises": [
                 {
-                    "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "id": "left_quadriceps_stretch",                    
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
+                },
+                {
+                    "id": "left_stand_on_leg",
+                    "goal": {"repetitions": 1},
+                    "breakSeconds": 14
+                },
+                {
+                    "id": "right_stand_on_leg",
+                    "goal": {"repetitions": 1},
+                    "breakSeconds": 14
+                },
+                {
+                    "id": "left_stand_on_leg",
+                    "goal": {"repetitions": 1},
+                    "breakSeconds": 14
+                },
+                {
+                    "id": "right_stand_on_leg",
+                    "goal": {"repetitions": 1},
+                    "breakSeconds": 14
+                },
+                {
+                    "id": "left_stand_on_leg",
+                    "goal": {"repetitions": 1},
+                    "breakSeconds": 14
+                },
+                {
+                    "id": "right_stand_on_leg",
+                    "goal": {"repetitions": 1},
+                    "breakSeconds": 14
                 },
                 {
                     "id": "left_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 }, {
                     "id": "right_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_tensor_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 }
             ]
@@ -278,82 +350,87 @@
             "exercises": [
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "left_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "right_quadriceps_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "calf_stretch_left",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "calf_stretch_right",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "triceps_stretch_left",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "triceps_stretch_right",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "cobra_stretch",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
+                    "breakSeconds": 7
+                },
+                {
+                    "id": "cat_cow_pose",
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "childs_pose",
-                    "activeSeconds": 40,
+                    "goal": {"duration": 40},
                     "breakSeconds": 7
                 },
                 {
                     "id": "bridge",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "lying_butterfly_stretch",
-                    "activeSeconds": 50,
+                    "goal": {"duration": 50},
                     "breakSeconds": 7
                 },
                 {
                     "id": "lying_twitch_stretch_left",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 },
                 {
                     "id": "lying_twitch_stretch_right",
-                    "activeSeconds": 30,
+                    "goal": {"duration": 30},
                     "breakSeconds": 7
                 }
             ]

@@ -1,5 +1,5 @@
 <!-- Hero Section -->
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-white w-full">
   <div class="container mx-auto px-4 py-16">
     <div class="flex justify-between items-center mb-6">
       <a routerLink="/scheduled" class="p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Scheduled Workouts">
@@ -32,7 +32,7 @@
     <!-- Sport selection -->
     <section>
       @for (item of workouts(); track $index) {
-        <app-exercise-set-overview (clicked)="openExercise(item.id)" class="w-full" [title]="item.title" [description]="item.description" [estimatedTime]="item.duration"></app-exercise-set-overview>
+        <app-exercise-set-overview (clicked)="openExercise(item.id)" class="w-full" [title]="item.title" [description]="item.description" [estimatedTime]="item.duration" [currentStreak]="item.currentStreak"></app-exercise-set-overview>
       }
     </section>
   }

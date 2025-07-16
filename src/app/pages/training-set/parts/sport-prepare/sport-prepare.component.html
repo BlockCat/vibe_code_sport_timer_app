@@ -1,0 +1,53 @@
+<div
+  class="relative px-4 bg-white shadow-xl sm:rounded-3xl sm:p-20 w-full h-full"
+>
+  <div class="max-w-md mx-auto">
+    <div class="divide-y divide-gray-200">
+      <div
+        class="text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7"
+      >
+        <!-- Header -->
+        <app-exercise-header
+          [title]="currentExerciseSet().title"
+          [description]="currentExerciseSet().description"
+        />
+
+        <!-- Exercise Details -->
+        <div>
+          <app-exercise-details-card
+            [exerciseName]="title(currentExercise().index)"
+            [durationSeconds]="7"
+            [preparing]="true"
+          />
+        </div>
+
+        <!-- Timer Display -->
+        <div class="flex flex-col items-center justify-center py-6">
+          <app-timer [remainingMs]="timesMsRemaining()" [totalSeconds]="7" />
+          <div class="w-full max-w-xs mx-auto mt-4">
+            <app-exercise-controls>
+              <app-exercise-control-button (pressed)="start.emit()">
+                Start
+              </app-exercise-control-button>
+            </app-exercise-controls>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="mt-8">
+          <app-exercise-progress
+            [currentExercise]="currentExercise().index"
+            [totalExercises]="currentExerciseSet().exercises.length"
+          />
+        </div>
+
+        <!-- Exercise Set Info -->
+        <app-exercise-set-info
+          [duration]="currentExerciseSet().duration"
+          [totalExercises]="currentExerciseSet().exercises.length"
+        >
+        </app-exercise-set-info>
+      </div>
+    </div>
+  </div>
+</div>
