@@ -34,10 +34,9 @@ export class TimerService {
 
 export class Stopwatch {
   private _remainingMs: WritableSignal<number>;
-  private _completed: WritableSignal<boolean> = signal(false);
 
   remainingMs: Signal<number>;
-  completed: Signal<boolean>;
+  completed = computed(() => this.remainingSeconds() == 0);
   remainingSeconds: Signal<number> = computed(() => {
     return Math.ceil(this._remainingMs() / 1000);
   });
@@ -62,12 +61,10 @@ export class Stopwatch {
   constructor() {
     this._remainingMs = signal(0);
     this.remainingMs = this._remainingMs.asReadonly();
-    this.completed = this._completed.asReadonly();
   }
 
   start(remainingNs: number): Stopwatch {
     this._remainingMs.set(remainingNs);
-    this._completed.set(false);
     if (this.isRunning) {
       this.stop();
     }
@@ -76,12 +73,11 @@ export class Stopwatch {
 
     this.timer = setInterval(() => {
       if (this._remainingMs() <= 0) {
-        if (!this._completed()) {
-          this.onTick(0);
-          this.stop();
-          this.onComplete();
-          this._completed.set(true);
-        }
+        this.onTick(0);
+        this.stop();
+        this.onComplete();
+        console.log('Stopwatch completed');
+
         return;
       }
 
